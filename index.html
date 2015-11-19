@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <script src="js/phaser.min.js"></script>
+    <script src="js/boot.js"></script>
+    <script src="js/preloader.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/enemy.js"></script>
+	<script src="js/turret.js"></script>
+    <script src="js/player.js"></script>
+</head>
+<body>
+
+<div id="game"></div>
+
+<script type="text/javascript">
+
+window.onload = function() {
+
+    // L'application
+    var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game');
+
+    // Les états possibles
+    game.state.add('boot', MyGame.Boot);
+    game.state.add('preloader', MyGame.Preloader);
+    game.state.add('menu', MyGame.Menu);
+    game.state.add('game', MyGame.Game);
+
+    // On démarre avec l'état 'boot'
+    game.state.start('boot');
+};
+
+</script>
+
+</body>
+</html>
