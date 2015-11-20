@@ -9,17 +9,16 @@ MyGame.Preloader.prototype = {
 
         this.stage.backgroundColor = '#78fdff';
 
-        this.add.audio('maintheme');
+        this.add.audio('maingame');
 		this.load.image('core', 'assets/core.png');
-        this.load.image('fond_degrader', 'assets/fond_degrader.png');
-        //this.load.image('fond', 'assets/fond.png');
+        this.load.image('background', 'assets/background.png');
         this.load.image('turret', 'assets/turret.png');
         this.load.image('skin', 'assets/skin.png');
         this.load.image('platform', 'assets/platform.png');
         this.load.spritesheet('player', 'assets/player.png', 104.28, 89.5);
         this.load.spritesheet('ennemies', 'assets/ennemies.png', 50, 100);
         this.load.image('bullet', 'assets/bullet.png');
-        this.load.audio('maintheme', 'assets/audio/maintheme.mp3');
+        this.load.audio('maintheme', 'assets/audio/maingame.mp3');
     },
 
     create: function () {

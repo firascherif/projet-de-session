@@ -45,8 +45,7 @@ MyGame.Game.prototype = {
         this.en = new Enemy(game);
 
         // Game stagetimer
-        var background_image = game.add.sprite(0,0, 'fond_degrader');
-        //fond.scale.setTo(0.6, 0.6);
+        var background_image = game.add.sprite(0,0, 'background');
         background_image.fixedToCamera = true;
         
         // La physique du jeu ARCADE
