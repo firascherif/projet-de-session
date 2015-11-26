@@ -11,7 +11,7 @@ MyGame.Preloader.prototype = {
 
         this.add.audio('maingame');
 		this.load.image('core', 'assets/core.png');
-        this.load.image('background', 'assets/background.png');
+        this.load.image('background', 'assets/Background3.png');
         this.load.image('turret', 'assets/turret.png');
         this.load.image('skin', 'assets/skin.png');
         this.load.image('platform', 'assets/platform.png');
