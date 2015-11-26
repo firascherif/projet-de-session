@@ -22,6 +22,7 @@ MyGame.Game = function (game) {
     this.rnd;       //  the repeatable random number generator (Phaser.RandomDataGenerator)
 
 
+
     // Variables du jeu
     this.server = '';//http://localhost:8080/';
     this.player;
@@ -33,8 +34,11 @@ MyGame.Game = function (game) {
     this.nbrTurrets = 0;
     this.turret;
     this.enemy;
-    this.bullet;
+    //this.bullet;
     this.timer;
+
+    var bullets;
+    var bulletTime = 0;
 };
 
 MyGame.Game.prototype = {
@@ -46,6 +50,7 @@ MyGame.Game.prototype = {
 
         // Game stagetimer
         var background_image = game.add.tileSprite(0,0,1024,600, 'background');
+        background_image.autoScroll(-30,0);
         background_image.fixedToCamera = true;
 
         // La physique du jeu ARCADE
@@ -83,6 +88,7 @@ MyGame.Game.prototype = {
 
         // Player
         this.cursors = this.game.input.keyboard.createCursorKeys();
+        //var spaceBar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.player = new player(this.game, this.cursors);
 
         // Camera
@@ -90,7 +96,7 @@ MyGame.Game.prototype = {
 
         // Full screen
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        this.game.input.onDown.add(this.fullscreen, this);
+        //this.game.input.onDown.add(this.fullscreen, this);
 
         // Ennemies
         this.ennemies = this.game.add.group();
@@ -108,6 +114,11 @@ MyGame.Game.prototype = {
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.bullets.createMultiple(30, 'bullet');
+        this.bullets.setAll('anchor.x', 0.5);
+        this.bullets.setAll('anchor.y', 1);
+        this.bullets.setAll('outOfBoundsKill', true);
+        this.bullets.setAll('checkWorldBounds', true);
 
         this.enemyWave();
 
@@ -169,6 +180,14 @@ update : function () {
         this.game.physics.arcade.overlap(this.bullets, this.ennemies, this.bulletVSenemy, null, this);
         this.game.physics.arcade.overlap(this.core, this.ennemies, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);
+
+
+    //faire tirer le bonhomme :
+    if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+        this.fire();
+    }
+
+
     },
 
     changeBackgroundColor : function (time){
@@ -294,6 +313,33 @@ render : function () {
         //game.debug.bodyInfo(enemy, 16, 50);
         //game.debug.cameraInfo(game.camera, 32, 32);
 
+    },
+
+fire : function(){
+    //  To avoid them being allowed to fire too fast we set a time limit
+    if (this.game.time.now > this.bulletTime)
+    {
+        //  Grab the first bullet we can from the pool
+        bullet = bullets.getFirstExists(false);
+
+        if (bullet)
+        {
+            //  And fire it
+            bullet.reset(player.x, player.y + 8);
+            bullet.body.velocity.y = 30;
+            this.bulletTime = this.game.time.now + 200;
+            game.physics.arcade.moveToPointer(bullet, 300);
+
+        }
     }
+    console.log('allo');
+},
+
+resetBullet : function(bullet){
+    bullet.kill();
+    //console.log("ca passe");
+}
+
+
 
 }
