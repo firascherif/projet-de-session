@@ -32,7 +32,7 @@ MyGame.Game = function (game) {
     this.core;
     this.skin;
     this.enemy;
-    //this.Bullet;
+    this.Bullet;
     this.timer;
 
     var bullets;

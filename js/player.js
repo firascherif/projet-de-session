@@ -8,12 +8,15 @@ player = function(game, cursors){
 	game.physics.enable(this.player, Phaser.Physics.ARCADE);
 	this.player.body.gravity.y = 600;
 	this.player.body.collideWorldBounds = true;
-	this.player.animations.add('idleRight', [8,9,10,11,12,13,14], 5, true);
-	this.player.animations.add('idleLeft', [29,30,31,32,33,34,35], 5, true);
-	this.player.animations.add('right', [15,16,17,18,19,20,21], 5, true);
-	this.player.animations.add('left', [1,2,3,4,5,6,7], 5, true);
-	//player.animations.play('idle', 10, true);
-	this.player.anchor.set(0.5);
+	
+	this.player.animations.add('right', [141,142,143], 3, true);
+	this.player.animations.add('left', [121,122,123,124,125], 5, true);
+	//player.animations.play('idle', 39, true);
+	this.player.animations.add('idleRight', [156,157], 3, true);
+	this.player.animations.add('idleLeft', [130,131], 3, true);
+	
+
+	this.player.anchor.set(0.5, 0.5);
 
 	
 };
@@ -43,7 +46,8 @@ player.prototype.movePlayer = function(){
 			this.player.animations.play('right');
 			this.playerFacing = 'right';
 		}
-	}else 
+	}
+	else 
 	{
 
 		if (this.playerFacing !== 'idle')
