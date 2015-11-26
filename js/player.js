@@ -1,18 +1,31 @@
 player = function(game, cursors){
 
 	this.cursors = cursors;
-	this.playerFacing = 'right';
+	this.playerFacing = 'left';
 	
 	//Créer le player
-	this.player = game.add.sprite(200,1000, 'player');    
+	var spritePlayer;
+	this.player = game.add.sprite( 200, 1001, 'player', 26);
 	game.physics.enable(this.player, Phaser.Physics.ARCADE);
 	this.player.body.gravity.y = 600;
 	this.player.body.collideWorldBounds = true;
-	this.player.animations.add('idleRight', [8,9,10,11,12,13,14], 5, true);
-	this.player.animations.add('idleLeft', [29,30,31,32,33,34,35], 5, true);
-	this.player.animations.add('right', [15,16,17,18,19,20,21], 5, true);
-	this.player.animations.add('left', [1,2,3,4,5,6,7], 5, true);
-	//player.animations.play('idle', 10, true);
+
+	var walk = this.player.animations.add('walk');
+
+	//  And this starts the animation playing by using its key ("walk")
+	//  30 is the frame rate (30fps)
+	//  true means it will loop when it finishes
+	//this.player.animations.play('walk', [], true);
+
+
+
+	//this.player.animations.add('idleRight', [7,8,9,10,11,12], 5, true);
+	//var tmp = new Phaser.Animation(this.game,this.player,'test',"assets/player.png",[7,8,9,10,11,12],true);
+	//this.player.animations.add(tmp);
+	//this.player.animations.add('idleLeft', [29,30,31,32,33,34,35], 5, true);
+	this.player.animations.add('right', [143,144,145,146,147,148,149,150], 10, true);
+	this.player.animations.add('left', [117,118,119,120,121,122,123,124], 10, true);
+	//this.player.animations.play('idle', 7, true);
 	this.player.anchor.set(0.5);
 
 	
@@ -27,7 +40,7 @@ player.prototype.movePlayer = function(){
 
 	if (this.cursors.left.isDown)
 	{
-		this.player.body.velocity.x = -300;
+		this.player.body.velocity.x = -100;
 
 		if (this.playerFacing !== 'left')
 		{
@@ -36,7 +49,7 @@ player.prototype.movePlayer = function(){
 		}
 	}else if (this.cursors.right.isDown)
 	{
-		this.player.body.velocity.x = 300;
+		this.player.body.velocity.x = 100;
 
 		if (this.playerFacing !== 'right')
 		{
@@ -52,11 +65,11 @@ player.prototype.movePlayer = function(){
 
 			if (this.playerFacing === 'left')
 			{
-			   this.player.animations.play('idleLeft');
+			   //this.player.animations.play('idleLeft');
 			}
 			else
 			{
-			   this.player.animations.play('idleRight');
+			   //this.player.animations.play('idleRight');
 			}
 
 			this.playerFacing = 'idle';
@@ -71,13 +84,12 @@ player.prototype.movePlayer = function(){
 
     if (!this.player.body.touching.down)
 	{
-
         if (this.playerFacing === 'left')
-            this.player.frame = 12;
-        else if (this.playerFacing === 'idle')
-            this.player.frame = 13;
+            this.player.frame = 117;
+        //else if (this.playerFacing === 'idle')
+            //this.player.frame = 13;
         else if (this.playerFacing === 'right')
-            this.player.frame = 14;
+            this.player.frame = 143;
     }
 
     if (!this.player.body.touching.down && this.cursors.down.isDown)

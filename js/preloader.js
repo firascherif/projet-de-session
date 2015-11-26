@@ -15,9 +15,9 @@ MyGame.Preloader.prototype = {
         this.load.image('turret', 'assets/turret.png');
         this.load.image('skin', 'assets/skin.png');
         this.load.image('platform', 'assets/platform.png');
-        this.load.spritesheet('player', 'assets/player.png', 104.28, 89.5);
-        this.load.spritesheet('ennemies', 'assets/ennemies.png', 50, 100);
-        this.load.image('bullet', 'assets/bullets.gif');
+        this.load.spritesheet('player', 'assets/player.png',64,64);
+        this.load.spritesheet('ennemies', 'assets/player.png', 60, 65);
+        this.load.image('test', 'assets/bullet.png');
         this.load.audio('maintheme', 'assets/audio/maingame.mp3');
     },
 

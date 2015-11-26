@@ -107,7 +107,7 @@ MyGame.Game.prototype = {
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-        this.bullets.createMultiple(30, 'bullet');
+        this.bullets.createMultiple(30, 'test');
         this.bullets.setAll('anchor.x', 0.5);
         this.bullets.setAll('anchor.y', 1);
         this.bullets.setAll('outOfBoundsKill', true);
@@ -266,20 +266,15 @@ render : function () {
     },
 
 fire : function(){
-    if (this.game.time.now > this.bulletTime)
-    {
-        bullet = this.bullets.getFirstExists(false);
 
-        if (bullet)
-        {
-            bullet.revive();
-            bullet.reset(player.x, player.y + 8);
-            bullet.body.velocity.y = 30;
+        var tmp = this.bullets.getFirstDead();
+        console.log(tmp.x);
+        if (tmp){
+            tmp.reset(this.player.x, this.player.y + 8);
+            tmp.body.velocity.y = 30;
             this.bulletTime = this.game.time.now + 200;
-
         }
-    }
-    console.log('allo');
+
 },
 
 resetBullet : function(bullet){
