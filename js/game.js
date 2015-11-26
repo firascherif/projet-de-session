@@ -31,10 +31,8 @@ MyGame.Game = function (game) {
     this.platforms;
     this.core;
     this.skin;
-    this.nbrTurrets = 0;
-    this.turret;
     this.enemy;
-    //this.bullet;
+    //this.Bullet;
     this.timer;
 
     var bullets;
@@ -105,11 +103,6 @@ MyGame.Game.prototype = {
         this.ennemies.setAll("body.gravity.y", 500);
         this.ennemies.setAll("body.collideWorldBounds", true);
 
-        // Turrets
-        this.turrets = this.game.add.group();
-        this.turrets.enableBody = true;
-        this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
-
         // Bullets
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
@@ -124,18 +117,14 @@ MyGame.Game.prototype = {
 
         // Initializing Controls
         //this.cursors = this.game.input.keyboard.createCursorKeys();
-        this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
         this.actionKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-        this.actionKey.onDown.add(creationTurret, this);
+        this.actionKey3 = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
+        this.actionKey3.onDown.add(creationBullet,this);
 
-        function creationTurret (){
-         if (this.player.player.body.touching.down){
-
-                this.nbrTurrets++;
-				this.turrets.add(new Turret(this.player.player.x + 30, this.player.player.y + 14,this.game));
-
+        function creationBullet(){
+            this.bullets.add(new Bullet(30,30,this.game));
         }
-    }
+
 
     this.time = this.game.time.now;
 },
@@ -148,7 +137,6 @@ update : function () {
         // Collisions
         this.game.physics.arcade.collide(this.player.player, this.platforms,null,this.player.passerAtravers, this);
         this.game.physics.arcade.collide(this.ennemies, this.platforms);
-        this.game.physics.arcade.collide(this.turrets, this.platforms);
         //this.game.physics.arcade.collide(ennemies, player);
         //this.game.physics.arcade.collide(ennemies);
 
@@ -160,21 +148,6 @@ update : function () {
         this.moveCamera();
 
         this.changeBackgroundColor(this.game.time.now % 100000);
-
-        
-        
-        for (var x in this.turrets.children){
-			this.turrets.children[x].time += this.game.time.elapsed;
-			
-			
-			
-			var dis = Phaser.Point.distance(this.turrets.children[x].position, this.enemy.position);
-			
-			if(this.turrets.children[x].time > 1000 && dis < 400){
-				console.log("bang bang");
-				this.turrets.children[x].time = 0;
-			}
-		}
 		
 		
         this.game.physics.arcade.overlap(this.bullets, this.ennemies, this.bulletVSenemy, null, this);
@@ -221,29 +194,6 @@ enemyVSskin : function(skin, enemy) {
     enemy.body.velocity.x = -10;
 },
 
-
-turretShoot : function(){
-
-    var speed = 50;
-
-    this.time += this.game.time.now % 1000;
-
-    if (this.time > 30000) {
-
-        this.bullet = this.bullets.create(this.turret.x, this.turret.y, 'bullet');
-
-        if (this.turret.x < this.enemy.x)
-            this.bullet.body.velocity.x = speed;
-        else
-            this.bullet.body.velocity.x = -speed;
-
-            //bullet.body.velocity.y = -(Math.abs(turret.y - enemy.y));
-
-            this.game.physics.arcade.moveToObject(this.bullet, this.enemy,300);
-
-            this.time = 0;
-        }
-    },
 
     moveCamera : function(){
 
@@ -316,19 +266,16 @@ render : function () {
     },
 
 fire : function(){
-    //  To avoid them being allowed to fire too fast we set a time limit
     if (this.game.time.now > this.bulletTime)
     {
-        //  Grab the first bullet we can from the pool
-        bullet = bullets.getFirstExists(false);
+        bullet = this.bullets.getFirstExists(false);
 
         if (bullet)
         {
-            //  And fire it
+            bullet.revive();
             bullet.reset(player.x, player.y + 8);
             bullet.body.velocity.y = 30;
             this.bulletTime = this.game.time.now + 200;
-            game.physics.arcade.moveToPointer(bullet, 300);
 
         }
     }
@@ -337,7 +284,6 @@ fire : function(){
 
 resetBullet : function(bullet){
     bullet.kill();
-    //console.log("ca passe");
 }
 
 
