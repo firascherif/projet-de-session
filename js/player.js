@@ -6,7 +6,7 @@ player = function(game, cursors){
 	//Créer le player
 	this.player = game.add.sprite( 200, 1001, 'player', 26);
 	game.physics.enable(this.player, Phaser.Physics.ARCADE);
-	this.player.body.gravity.y = 600;
+	this.player.body.gravity.y = 700;
 	this.player.body.collideWorldBounds = true;
 
 
@@ -69,7 +69,7 @@ player.prototype.movePlayer = function(){
 
     if (this.cursors.up.isDown && this.player.body.touching.down)
     {
-		this.player.body.velocity.y = -400;
+		this.player.body.velocity.y = -450;
 
     }
 
