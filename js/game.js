@@ -98,9 +98,13 @@ MyGame.Game.prototype = {
 
         // Ennemies
 
-        this.enemy = new Enemy(this.game,175,600);
-        //this.enemyArray.push(this.enemy);
-        enemyArray = new Array();
+        
+        this.enemyArray = new Array();
+        this.enemyArray.push(new Enemy(this.game,365,600,100,400),
+            new Enemy(this.game,500,600,300,400),
+            new Enemy(this.game,765,600,715,840),
+        new Enemy(this.game,1170,600,1100,1240),
+        new Enemy(this.game,1965,1000,300,400));
 
 
         // Bullets
@@ -136,14 +140,16 @@ update : function () {
     var variable = this;
         // Collisions
         this.game.physics.arcade.collide(this.player.player, this.platforms,null,this.player.passerAtravers, this);
-        this.game.physics.arcade.collide(this.enemy.enemy, this.platforms);
 
         // Refresh changed values
         this.player.player.body.velocity.x = 0;
         this.player.player.body.acceleration.y = 0;
 
         this.player.movePlayer();
-        this.enemy.moveEnemy(50,500);
+        for(var i =0;i<this.enemyArray.length;i++){
+            this.enemyArray[i].moveEnemy();
+            this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.platforms);
+        }
         this.moveCamera();
 
         this.changeBackgroundColor(this.game.time.now % 100000);
@@ -211,7 +217,7 @@ enemyVSskin : function(skin, enemy) {
 
 enemyWave : function(){
 
-    this.enemy = new Enemy(1000,500,this.game);
+    //this.enemy = new Enemy(1000,500,this.game);
     //this.enemy.body.velocity.x = -100;
     //this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
     //this.enemy.body.gravity.y = 500;

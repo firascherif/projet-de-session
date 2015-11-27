@@ -31,6 +31,7 @@ player.prototype.movePlayer = function(){
 
 	if (this.cursors.left.isDown)
 	{
+        console.log(this.player.x);
 		this.player.body.velocity.x = -150;
 
 		if (this.playerFacing !== 'left')

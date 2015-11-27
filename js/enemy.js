@@ -1,6 +1,7 @@
 Enemy = function (game,x,y,minX,maxX) {
 
-
+    this.minX = minX;
+    this.maxX = maxX;
 	this.enemyFacing = 'left';
 
 	//Créer l'enemy
@@ -13,6 +14,7 @@ Enemy = function (game,x,y,minX,maxX) {
 	this.enemy.animations.add('right', [143,144,145,146,147,148,149,150], 10, true);
 	this.enemy.animations.add('left', [117,118,119,120,121,122,123,124], 10, true);
 	this.enemy.body.velocity.x = -100;
+    this.enemy.animations.play('left');
 	this.enemy.anchor.set(0.5);
 
 };
@@ -24,13 +26,13 @@ Enemy.prototype.action = function(mofo){
 	
 }
 
-Enemy.prototype.moveEnemy = function(minX,maxX){
+Enemy.prototype.moveEnemy = function(){
     //console.log();
-    if(this.enemy.x >= maxX){
+    if(this.enemy.x >= this.maxX){
         //console.log("gauche");
         this.enemy.body.velocity.x = -100;
         this.enemy.animations.play('left');
-    }else if(this.enemy.x <= minX){
+    }else if(this.enemy.x <= this.minX){
         //console.log("droite")
         this.enemy.body.velocity.x = 100;
         this.enemy.animations.play('right');
