@@ -57,7 +57,7 @@ MyGame.Game.prototype = {
 
         // Core n Skin
         this.core = this.game.add.sprite(0,600, 'core');
-        this.skin = this.game.add.sprite(60,600, 'skin');
+        this.skin = this.game.add.sprite(50,600, 'skin');
         this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
 
