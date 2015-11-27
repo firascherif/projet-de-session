@@ -31,7 +31,7 @@ player.prototype.movePlayer = function(){
 
 	if (this.cursors.left.isDown)
 	{
-		this.player.body.velocity.x = -150;
+		this.player.body.velocity.x = -200;
 
 		if (this.playerFacing !== 'left')
 		{
@@ -40,7 +40,7 @@ player.prototype.movePlayer = function(){
 		}
 	}else if (this.cursors.right.isDown)
 	{
-		this.player.body.velocity.x = 150;
+		this.player.body.velocity.x = 200;
 
 		if (this.playerFacing !== 'right')
 		{
@@ -70,6 +70,12 @@ player.prototype.movePlayer = function(){
     if (this.cursors.up.isDown && this.player.body.touching.down)
     {
 		this.player.body.velocity.y = -450;
+
+    }
+
+    if (this.cursors.down.isDown && this.player.body.touching.down)
+    {
+        this.player.body.velocity.y = 100;
 
     }
 

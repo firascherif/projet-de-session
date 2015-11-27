@@ -96,14 +96,20 @@ MyGame.Game.prototype = {
 
         // Ennemies
 
+//creation aleatoire des ennemies ::: A FAIRE
 
         this.enemyArray = new Array();
-        this.enemyArray.push(new Enemy(this.game, 365, 600, 100, 400),
-            new Enemy(this.game, 500, 600, 300, 400),
-            new Enemy(this.game, 765, 600, 715, 840),
-            new Enemy(this.game, 1170, 600, 1100, 1240),
-            new Enemy(this.game, 1965, 1000, 300, 400));
+        for(var i =0;i<25;i++) {
+                posX  = Math.random() * 4800;
+                posY = Math.random() * 500;
+                this.enemyArray.push(new Enemy(this.game, posX,posY));
 
+        }
+
+        //setter la distance min et max de x si sur plateforme
+        for(var i = 0;i<this.enemyArray.length;i++){
+            this.enemyArray[i].verifierSurPlateforme(plateformArray);
+        }
 
         // Bullets
         this.bullets = this.game.add.group();
@@ -227,7 +233,7 @@ MyGame.Game.prototype = {
 
     createPlatforms: function () {
 
-        var x = 300;
+        x = 300;
         plateformArray = new Array();
 
         function verifierPlateformePosition(x, y) {

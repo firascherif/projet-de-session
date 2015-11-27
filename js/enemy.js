@@ -1,7 +1,7 @@
-Enemy = function (game,x,y,minX,maxX) {
+Enemy = function (game,x,y) {
 
-    this.minX = minX;
-    this.maxX = maxX;
+    this.minX = 130;
+    this.maxX = 4800;
 	this.enemyFacing = 'left';
 
 	//Créer l'enemy
@@ -36,5 +36,20 @@ Enemy.prototype.moveEnemy = function(){
 
 }
 
+Enemy.prototype.verifierSurPlateforme = function(plateformArray)
+{
+    for (var i = 0; i < plateformArray.length; i++) {
+        //console.log(plateformArray[i].y);
+        if (this.enemy.x >= plateformArray[i].x
+        && this.enemy.x <= plateformArray[i].x + plateformArray[i].width
+        && this.enemy.y <= plateformArray[i].y){
+            console.log("coucou");
+            this.minX = plateformArray[i].x;
+            this.maxX = plateformArray[i].x + plateformArray[i].scale.x * plateformArray[i].width;
+
+        }
+
+    }
+}
 
 
