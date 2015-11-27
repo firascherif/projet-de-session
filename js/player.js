@@ -86,8 +86,8 @@ player.prototype.movePlayer = function(){
 	{
         if (this.playerFacing === 'left')
             this.player.frame = 117;
-        //else if (this.playerFacing === 'idle')
-            //this.player.frame = 13;
+        else if (this.playerFacing === 'idle')
+            this.player.frame = 26;
         else if (this.playerFacing === 'right')
             this.player.frame = 143;
     }
