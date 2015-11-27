@@ -9,12 +9,12 @@ player = function(game, cursors){
 	this.player.body.gravity.y = 600;
 	this.player.body.collideWorldBounds = true;
 	
-	this.player.animations.add('right', [141,142,143], 3, true);
-	this.player.animations.add('left', [121,122,123,124,125], 5, true);
-	//player.animations.play('idle', 39, true);
-	this.player.animations.add('idleRight', [156,157], 3, true);
-	this.player.animations.add('idleLeft', [130,131], 3, true);
 	
+	this.player.animations.add('idleRight', [156], 3, true);
+	this.player.animations.add('idleLeft', [130], 3, true);
+	this.player.animations.add('left', [121], 3, true);
+    this.player.animations.add('idle', [4], 5, true);
+    this.player.animations.add('right', [141], 3, true);
 
 	this.player.anchor.set(0.5, 0.5);
 

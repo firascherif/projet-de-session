@@ -22,7 +22,6 @@ MyGame.Game = function (game) {
     this.rnd;       //  the repeatable random number generator (Phaser.RandomDataGenerator)
 
 
-
     // Variables du jeu
     this.server = '';//http://localhost:8080/';
     this.player;
@@ -31,12 +30,11 @@ MyGame.Game = function (game) {
     this.platforms;
     this.core;
     this.skin;
+    this.nbrTurrets = 0;
+    this.turret;
     this.enemy;
-    this.Bullet;
+    this.bullet;
     this.timer;
-
-    var bullets;
-    var bulletTime = 0;
 };
 
 MyGame.Game.prototype = {
@@ -47,10 +45,9 @@ MyGame.Game.prototype = {
         this.en = new Enemy(game);
 
         // Game stagetimer
-        var background_image = game.add.tileSprite(0,0,1024,600, 'background');
-        background_image.autoScroll(-30,0);
+        var background_image = game.add.sprite(0,0, 'background');
         background_image.fixedToCamera = true;
-
+        
         // La physique du jeu ARCADE
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -86,7 +83,6 @@ MyGame.Game.prototype = {
 
         // Player
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        //var spaceBar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.player = new player(this.game, this.cursors);
 
         // Camera
@@ -94,7 +90,7 @@ MyGame.Game.prototype = {
 
         // Full screen
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        //this.game.input.onDown.add(this.fullscreen, this);
+        this.game.input.onDown.add(this.fullscreen, this);
 
         // Ennemies
         this.ennemies = this.game.add.group();
@@ -103,28 +99,32 @@ MyGame.Game.prototype = {
         this.ennemies.setAll("body.gravity.y", 500);
         this.ennemies.setAll("body.collideWorldBounds", true);
 
+        // Turrets
+        this.turrets = this.game.add.group();
+        this.turrets.enableBody = true;
+        this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
+
         // Bullets
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-        this.bullets.createMultiple(30, 'bullet');
-        this.bullets.setAll('anchor.x', 0.5);
-        this.bullets.setAll('anchor.y', 1);
-        this.bullets.setAll('outOfBoundsKill', true);
-        this.bullets.setAll('checkWorldBounds', true);
 
         this.enemyWave();
 
         // Initializing Controls
         //this.cursors = this.game.input.keyboard.createCursorKeys();
+        this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
         this.actionKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-        this.actionKey3 = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
-        this.actionKey3.onDown.add(creationBullet,this);
+        this.actionKey.onDown.add(creationTurret, this);
 
-        function creationBullet(){
-            this.bullets.add(new Bullet(30,30,this.game));
+        function creationTurret (){
+         if (this.player.player.body.touching.down){
+
+                this.nbrTurrets++;
+				this.turrets.add(new Turret(this.player.player.x + 30, this.player.player.y + 14,this.game));
+
         }
-
+    }
 
     this.time = this.game.time.now;
 },
@@ -137,6 +137,7 @@ update : function () {
         // Collisions
         this.game.physics.arcade.collide(this.player.player, this.platforms,null,this.player.passerAtravers, this);
         this.game.physics.arcade.collide(this.ennemies, this.platforms);
+        this.game.physics.arcade.collide(this.turrets, this.platforms);
         //this.game.physics.arcade.collide(ennemies, player);
         //this.game.physics.arcade.collide(ennemies);
 
@@ -148,19 +149,26 @@ update : function () {
         this.moveCamera();
 
         this.changeBackgroundColor(this.game.time.now % 100000);
+
+        
+        
+        for (var x in this.turrets.children){
+			this.turrets.children[x].time += this.game.time.elapsed;
+			
+			
+			
+			var dis = Phaser.Point.distance(this.turrets.children[x].position, this.enemy.position);
+			
+			if(this.turrets.children[x].time > 1000 && dis < 400){
+				console.log("bang bang");
+				this.turrets.children[x].time = 0;
+			}
+		}
 		
 		
         this.game.physics.arcade.overlap(this.bullets, this.ennemies, this.bulletVSenemy, null, this);
         this.game.physics.arcade.overlap(this.core, this.ennemies, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);
-
-
-    //faire tirer le bonhomme :
-    if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-        this.fire();
-    }
-
-
     },
 
     changeBackgroundColor : function (time){
@@ -194,6 +202,27 @@ enemyVSskin : function(skin, enemy) {
     enemy.body.velocity.x = -10;
 },
 
+
+bulletShoot : function(){
+
+    var speed = 50;
+
+    this.time += this.game.time.now % 1000;
+
+    if (this.time > 30000) {
+
+        this.bullet = this.bullets.create(this.player.x, this.player.y, 'bullet');
+
+        if (this.player.x < this.enemy.x)
+            this.bullet.body.velocity.x = speed;
+        else
+            this.bullet.body.velocity.x = -speed;
+
+            this.game.physics.arcade.moveToObject(this.bullet, this.enemy,300);
+
+            this.time = 0;
+        }
+    },
 
     moveCamera : function(){
 
@@ -263,29 +292,6 @@ render : function () {
         //game.debug.bodyInfo(enemy, 16, 50);
         //game.debug.cameraInfo(game.camera, 32, 32);
 
-    },
-
-fire : function(){
-    if (this.game.time.now > this.bulletTime)
-    {
-        bullet = this.bullets.getFirstExists(false);
-
-        if (bullet)
-        {
-            bullet.revive();
-            bullet.reset(player.x, player.y + 8);
-            bullet.body.velocity.y = 30;
-            this.bulletTime = this.game.time.now + 200;
-
-        }
     }
-    console.log('allo');
-},
-
-resetBullet : function(bullet){
-    bullet.kill();
-}
-
-
 
 }
