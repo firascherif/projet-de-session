@@ -6,7 +6,6 @@ Enemy = function (game,x,y,minX,maxX) {
 
 	//Créer l'enemy
 	this.enemy = game.add.sprite(x,y, 'enemy', 26);
-    console.log(this.enemy.y);
 	game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
 	this.enemy.body.gravity.y = 500;
 	this.enemy.body.collideWorldBounds = true;
@@ -19,7 +18,6 @@ Enemy = function (game,x,y,minX,maxX) {
 
 };
 
-//Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 
 Enemy.prototype.action = function(mofo){
 
@@ -27,13 +25,10 @@ Enemy.prototype.action = function(mofo){
 }
 
 Enemy.prototype.moveEnemy = function(){
-    //console.log();
     if(this.enemy.x >= this.maxX){
-        //console.log("gauche");
         this.enemy.body.velocity.x = -100;
         this.enemy.animations.play('left');
     }else if(this.enemy.x <= this.minX){
-        //console.log("droite")
         this.enemy.body.velocity.x = 100;
         this.enemy.animations.play('right');
     }

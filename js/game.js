@@ -98,7 +98,7 @@ MyGame.Game.prototype = {
 
         // Ennemies
 
-        
+
         this.enemyArray = new Array();
         this.enemyArray.push(new Enemy(this.game,365,600,100,400),
             new Enemy(this.game,500,600,300,400),
