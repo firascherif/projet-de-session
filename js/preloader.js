@@ -16,7 +16,7 @@ MyGame.Preloader.prototype = {
         this.load.image('platform', 'assets/platform.png');
         this.load.image('platform2', 'assets/platform2.png');
         this.load.spritesheet('player', 'assets/player.png',64,64);
-        this.load.spritesheet('ennemies', 'assets/player.png', 60, 65);
+        this.load.spritesheet('enemy', 'assets/ennemy.png', 64, 64);
         this.load.image('test', 'assets/bullet.png');
         this.load.audio('maingame', 'assets/audio/maingame.mp3');
     },

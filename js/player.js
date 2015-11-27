@@ -4,19 +4,10 @@ player = function(game, cursors){
 	this.playerFacing = 'left';
 	
 	//Créer le player
-	var spritePlayer;
 	this.player = game.add.sprite( 200, 1001, 'player', 26);
 	game.physics.enable(this.player, Phaser.Physics.ARCADE);
 	this.player.body.gravity.y = 600;
 	this.player.body.collideWorldBounds = true;
-
-	var walk = this.player.animations.add('walk');
-
-	//  And this starts the animation playing by using its key ("walk")
-	//  30 is the frame rate (30fps)
-	//  true means it will loop when it finishes
-	//this.player.animations.play('walk', [], true);
-
 
 
 	//this.player.animations.add('idleRight', [7,8,9,10,11,12], 5, true);
@@ -40,7 +31,7 @@ player.prototype.movePlayer = function(){
 
 	if (this.cursors.left.isDown)
 	{
-		this.player.body.velocity.x = -100;
+		this.player.body.velocity.x = -150;
 
 		if (this.playerFacing !== 'left')
 		{
@@ -49,7 +40,7 @@ player.prototype.movePlayer = function(){
 		}
 	}else if (this.cursors.right.isDown)
 	{
-		this.player.body.velocity.x = 100;
+		this.player.body.velocity.x = 150;
 
 		if (this.playerFacing !== 'right')
 		{

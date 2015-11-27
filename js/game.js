@@ -97,11 +97,11 @@ MyGame.Game.prototype = {
         //this.game.input.onDown.add(this.fullscreen, this);
 
         // Ennemies
-        this.ennemies = this.game.add.group();
-        this.ennemies.enableBody = true;
-        this.ennemies.physicsBodyType = Phaser.Physics.ARCADE;
-        this.ennemies.setAll("body.gravity.y", 500);
-        this.ennemies.setAll("body.collideWorldBounds", true);
+
+        this.enemy = new Enemy(this.game,175,600);
+        //this.enemyArray.push(this.enemy);
+        enemyArray = new Array();
+
 
         // Bullets
         this.bullets = this.game.add.group();
@@ -113,7 +113,7 @@ MyGame.Game.prototype = {
         this.bullets.setAll('outOfBoundsKill', true);
         this.bullets.setAll('checkWorldBounds', true);
 
-        this.enemyWave();
+        //this.enemyWave();
 
         // Initializing Controls
         //this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -136,23 +136,22 @@ update : function () {
     var variable = this;
         // Collisions
         this.game.physics.arcade.collide(this.player.player, this.platforms,null,this.player.passerAtravers, this);
-        this.game.physics.arcade.collide(this.ennemies, this.platforms);
-        //this.game.physics.arcade.collide(ennemies, player);
-        //this.game.physics.arcade.collide(ennemies);
+        this.game.physics.arcade.collide(this.enemy.enemy, this.platforms);
 
         // Refresh changed values
         this.player.player.body.velocity.x = 0;
         this.player.player.body.acceleration.y = 0;
 
         this.player.movePlayer();
+        this.enemy.moveEnemy(50,500);
         this.moveCamera();
 
         this.changeBackgroundColor(this.game.time.now % 100000);
 		
 		
-        this.game.physics.arcade.overlap(this.bullets, this.ennemies, this.bulletVSenemy, null, this);
-        this.game.physics.arcade.overlap(this.core, this.ennemies, this.coreVSenemy, null, this);
-        this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);
+        this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
 
 
     //faire tirer le bonhomme :
@@ -181,7 +180,7 @@ update : function () {
  bulletVSenemy : function(bullet, enemy) {
     bullet.kill();
     enemy.kill();
-    this.enemyWave();
+    //this.enemyWave();
 },
 
 coreVSenemy : function(core, enemy) {
@@ -191,7 +190,7 @@ coreVSenemy : function(core, enemy) {
 
 enemyVSskin : function(skin, enemy) {
 
-    enemy.body.velocity.x = -10;
+    //enemy.body.velocity.x = -10;
 },
 
 
@@ -212,14 +211,14 @@ enemyVSskin : function(skin, enemy) {
 
 enemyWave : function(){
 
-    this.enemy = this.ennemies.create(1900,1000,'player');
-    this.enemy.body.velocity.x = -100;        
-    this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
-    this.enemy.body.gravity.y = 500;
-    this.enemy.body.collideWorldBounds = true;
-    this.enemy.animations.add('left', [6,7,8], 5, true);
-    this.enemy.animations.play('left');
-    this.enemy.anchor.set(0.5);
+    this.enemy = new Enemy(1000,500,this.game);
+    //this.enemy.body.velocity.x = -100;
+    //this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
+    //this.enemy.body.gravity.y = 500;
+    //this.enemy.body.collideWorldBounds = true;
+    //this.enemy.animations.add('left', [6,7,8], 5, true);
+    //this.enemy.animations.play('left');
+    //this.enemy.anchor.set(0.5);
 },
 
 createPlatforms : function(){
