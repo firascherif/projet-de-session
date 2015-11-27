@@ -69,10 +69,10 @@ MyGame.Game.prototype = {
         this.platforms.enableBody = true;
 
         //// Ground
-        this.ground = this.platforms.create(0,1170,'platform');
+        this.ground = this.platforms.create(0,1170,'platform2');
         this.ground.scale.setTo(10,2);
-        this.jungleGround = this.platforms.create(0,600,'platform');
-        this.jungleGround.scale.setTo(10,1);
+        //this.jungleGround = this.platforms.create(0,600,'platform2');
+        //this.jungleGround.scale.setTo(10,1);
 
         //// Ledges
         this.createPlatforms();
