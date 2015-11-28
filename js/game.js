@@ -30,11 +30,11 @@ MyGame.Game = function (game) {
     this.core;
     this.skin;
     this.enemy;
-    //this.Bullet;
     this.timer;
 
     var bullets;
     var bulletTime = 0;
+	
 };
 
 MyGame.Game.prototype = {
@@ -69,8 +69,7 @@ MyGame.Game.prototype = {
         //// Ground
         this.ground = this.platforms.create(0, 1170, 'platform2');
         this.ground.scale.setTo(10, 2);
-        //this.jungleGround = this.platforms.create(0,600,'platform2');
-        //this.jungleGround.scale.setTo(10,1);
+        
 
         //// Ledges
         this.createPlatforms();
@@ -90,13 +89,13 @@ MyGame.Game.prototype = {
         // Camera
         this.game.camera.y = 1200;
 
-        // Full screen
+        // plein ecran
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        //this.game.input.onDown.add(this.fullscreen, this);
+        this.game.input.onDown.add(this.fullscreen, this);
 
         // Ennemies
 
-//creation aleatoire des ennemies ::: A FAIRE
+//creation aleatoire des ennemies 
 
         this.enemyArray = new Array();
         for(var i =0;i<25;i++) {
@@ -156,8 +155,6 @@ MyGame.Game.prototype = {
         }
         this.moveCamera();
 
-        this.changeBackgroundColor(this.game.time.now % 100000);
-
 
         this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
         this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
@@ -165,37 +162,24 @@ MyGame.Game.prototype = {
 
 
         //faire tirer le bonhomme :
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
             this.fire();
         }
 
 
     },
 
-    changeBackgroundColor: function (time) {
 
-        if (time <= 50000) {
-            var red = (120 - 0.0022 * time);
-            var green = (253 - 0.002 * time);
-        } else {
-            var timeMod = time % 50000;
-            var red = (0.0022 * timeMod + 10);
-            var green = (153 + 0.002 * timeMod);
-        }
-
-        this.game.stage.backgroundColor = "#" + ((1 << 24) + (red << 16) + (green << 8) + 255).toString(16).slice(1);
-
-    },
 
     bulletVSenemy: function (bullet, enemy) {
         bullet.kill();
         enemy.kill();
-        //this.enemyWave();
+        this.enemyWave();
     },
 
     coreVSenemy: function (core, enemy) {
-        this.gui = this.game.add.text(0, 0, 'YOU LOSE', {fontSize: '32px', fill: '#000'});
-        this.gui.fixedToCamera = true;
+       // this.gui = this.game.add.text(0, 0, 'GAME OVER', {fontSize: '32px', fill: '#fff'});
+        //this.gui.fixedToCamera = true;
     },
 
     enemyVSskin: function (skin, enemy) {
@@ -221,14 +205,15 @@ MyGame.Game.prototype = {
 
     enemyWave: function () {
 
-        //this.enemy = new Enemy(1000,500,this.game);
-        //this.enemy.body.velocity.x = -100;
-        //this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
-        //this.enemy.body.gravity.y = 500;
-        //this.enemy.body.collideWorldBounds = true;
-        //this.enemy.animations.add('left', [6,7,8], 5, true);
-        //this.enemy.animations.play('left');
-        //this.enemy.anchor.set(0.5);
+        this.enemy = new Enemy(1000,500,this.game);
+        this.enemy.body.velocity.x = -100;
+        this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
+        this.enemy.body.gravity.y = 500;
+        this.enemy.body.collideWorldBounds = true;
+        
+		this.enemy.animations.add('left', [6,7,8], 5, true);
+        this.enemy.animations.play('left');
+        this.enemy.anchor.set(0.5);
     },
 
     createPlatforms: function () {
@@ -294,15 +279,22 @@ MyGame.Game.prototype = {
 
     fire: function () {
 
-        var tmp = this.bullets.getFirstDead();
+      /*  var tmp = this.bullets.getFirstDead();
         console.log(tmp.x);
         if (tmp) {
             tmp.reset(this.player.x, this.player.y + 8);
             tmp.body.velocity.y = 30;
             this.bulletTime = this.game.time.now + 200;
         }
-
+		*/
+		
+            // fire it
+            bullet.reset(player.x, player.y + 8);
+            bullet.body.velocity.y = -400;
+            bulletTime = game.time.now + 200;
+        
     },
+	
 
     resetBullet: function (bullet) {
         bullet.kill();
