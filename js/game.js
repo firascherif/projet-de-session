@@ -59,23 +59,21 @@ MyGame.Game.prototype = {
         this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
 
-        //this.game.physics.arcade.gravity.y = 600;
-        this.game.world.setBounds(0, 0, 4400, 1200);
+       
+        this.game.world.setBounds(0, 0, 5400, 1200);
 
         // Platforms
         this.platforms = this.game.add.group();
         this.platforms.enableBody = true;
 
         //// Ground
-        this.ground = this.platforms.create(0, 1170, 'platform2');
+        this.ground = this.platforms.create(0, 1180, 'platform2');
         this.ground.scale.setTo(10, 2);
         
 
         //// Ledges
         this.createPlatforms();
 
-        //platforms.create(200,1850,'platform');
-        // platforms.create(580,1790,'platform');
         this.platforms.setAll('body.immovable', true);
         this.platforms.setAll('body.checkCollision.down', false);
         this.platforms.setAll('body.checkCollision.left', false);
@@ -83,17 +81,14 @@ MyGame.Game.prototype = {
 
         // Player
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        //var spaceBar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.player = new player(this.game, this.cursors);
 
         // Camera
-        this.game.camera.y = 1200;
+        this.game.camera.y = 1000;
 
         // plein ecran
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
         this.game.input.onDown.add(this.fullscreen, this);
-
-        // Ennemies
 
 //creation aleatoire des ennemies 
 
