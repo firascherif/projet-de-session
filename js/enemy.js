@@ -43,7 +43,6 @@ Enemy.prototype.verifierSurPlateforme = function(plateformArray)
         if (this.enemy.x >= plateformArray[i].x
         && this.enemy.x <= plateformArray[i].x + plateformArray[i].width
         && this.enemy.y <= plateformArray[i].y){
-            console.log("coucou");
             this.minX = plateformArray[i].x;
             this.maxX = plateformArray[i].x + plateformArray[i].scale.x * plateformArray[i].width;
 

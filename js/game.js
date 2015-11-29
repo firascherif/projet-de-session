@@ -85,7 +85,7 @@ MyGame.Game.prototype = {
         this.cursors = this.game.input.keyboard.createCursorKeys();
         //var spaceBar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.player = new player(this.game, this.cursors);
-
+        //this.game.physics.player.
         // Camera
         this.game.camera.y = 1200;
 
@@ -143,7 +143,7 @@ MyGame.Game.prototype = {
         var variable = this;
         // Collisions
         this.game.physics.arcade.collide(this.player.player, this.platforms, null, this.player.passerAtravers, this);
-
+        //this.game.physics.arcade.collide(this.enemy.enemy,this.platforms)
         // Refresh changed values
         this.player.player.body.velocity.x = 0;
         this.player.player.body.acceleration.y = 0;
@@ -155,8 +155,10 @@ MyGame.Game.prototype = {
         }
         this.moveCamera();
 
+        //this.game.physics.arcade.overlap(this.player, this.enemy, this.verifierCollisionEnemy, null, this);
 
         this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.player, this.enemy, this.verifierCollisionEnemy(), null, this);
         this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
 
@@ -232,7 +234,7 @@ MyGame.Game.prototype = {
             for (var i = 0; i < array.length; i++) {
                 if (array[i].x + 300 >= x - scale && array[i].y + 350 >= y &&
                     array[i].x - 100 <= x - scale && array[i].y - 215 <= y){
-                    console.log("false");
+                    //console.log("false");
                     return false;
                 }
             }
@@ -298,6 +300,24 @@ MyGame.Game.prototype = {
 
     resetBullet: function (bullet) {
         bullet.kill();
+    },
+
+
+    verifierCollisionEnemy: function(){
+        //console.log("coucou");
+        //for(var i = 0;i < this.enemyArray; i++){
+        //    if(this.enemyArray[i].player.alive()) {
+        //        this.enemyArray[i].player.kill();
+        //        console.log('aca vads');
+        //    }
+        //}
+        console.log(this.player);
+        //console.log('test');
+        if (this.player.alive) {
+            this.player.kill();
+            console.log('kill');
+        }
+        this.player.player.revive();
     }
 
 
