@@ -73,12 +73,7 @@ MyGame.Game.prototype = {
         this.stars = this.game.add.group();
         this.stars.enableBody = true;
 
-        this.door = this.game.add.group();
-        this.door = this.door.create(5322,600,'door');
-        //this.game.physics.enable(this.door,Phaser.Physics.ARCADE);
-        this.door.enableBody = true;
-        this.door.immovable=true;
-        //this.door.checkCollision.left = true;
+
         for (var i = 0; i < 12; i++)
         {
             this.star = this.stars.create(i * 400, 20, 'star');
@@ -89,7 +84,6 @@ MyGame.Game.prototype = {
 
 
         this.game.world.setBounds(0, 0, 5400, 1200);
-
 
         // Platforms
         this.platforms = this.game.add.group();
@@ -139,7 +133,7 @@ MyGame.Game.prototype = {
         this.platformArray = new Array();
         this.enemies = this.game.add.group();
 
-        for(var i =0;i<2;i++) {
+        for(var i =0;i<25;i++) {
             //console.log('coucou');
                 posX  = Math.random() * 4800 + 400;
             //    posX = 800;
@@ -233,12 +227,12 @@ MyGame.Game.prototype = {
         this.game.physics.arcade.collide(this.enemies, this.ground);
         this.game.physics.arcade.collide(this.enemies, this.platforms);
         this.game.physics.arcade.collide(this.enemies, this.plateformeLimite);
-        this.game.physics.arcade.collide(this.player, this.door);
+        this.game.physics.arcade.collide(this.stars, this.platforms);
+        this.game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+        this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
+        this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy);
 
 
-        //if(this.games.physics.arcade.collide(this.player,this.door)){
-        //    console.log('fin du niveau');
-        //}
 
         // Refresh changed values
         this.player.player.body.velocity.x = 0;
@@ -307,6 +301,18 @@ MyGame.Game.prototype = {
                 this.game.camera.y += 15;
             }
         }
+    },
+
+    score: function () {
+        this.scoreText = this.game.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText.fixedToCamera = true;
+    },
+
+
+      collectStar : function (player, star) {
+    star.kill();
+    score += 10;
+    scoreText.text = 'Score: ' + score;
     },
 
     createPlatforms: function () {
