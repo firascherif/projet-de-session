@@ -34,6 +34,9 @@ MyGame.Game = function (game) {
 
     var bullets;
     var bulletTime = 0;
+
+    var score = 0;
+    var scoreText;
 	
 };
 
@@ -74,6 +77,10 @@ MyGame.Game.prototype = {
         //// Ledges
         this.createPlatforms();
 
+        //score
+        this.score();
+
+
         this.platforms.setAll('body.immovable', true);
         this.platforms.setAll('body.checkCollision.down', false);
         this.platforms.setAll('body.checkCollision.left', false);
@@ -90,7 +97,7 @@ MyGame.Game.prototype = {
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
         this.game.input.onDown.add(this.fullscreen, this);
 
-//creation aleatoire des ennemies 
+        //creation aleatoire des ennemies 
 
         this.enemyArray = new Array();
         for(var i =0;i<25;i++) {
@@ -115,7 +122,6 @@ MyGame.Game.prototype = {
         this.bullets.setAll('outOfBoundsKill', true);
         this.bullets.setAll('checkWorldBounds', true);
 
-        //this.enemyWave();
 
         // Initializing Controls
         //this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -167,9 +173,12 @@ MyGame.Game.prototype = {
 
 
     bulletVSenemy: function (bullet, enemy) {
-        bullet.kill();
+        if(this.enemies.getIndex(enemy) > -1)
+                this.enemies.remove(enemy);
         enemy.kill();
-        this.enemyWave();
+        bullet.kill();
+        this.score += 10;
+        this.scoreText.setText("Score : "+this.score);
     },
 
     coreVSenemy: function (core, enemy) {
@@ -198,17 +207,10 @@ MyGame.Game.prototype = {
         }
     },
 
-    enemyWave: function () {
-
-        this.enemy = new Enemy(1000,500,this.game);
-        this.enemy.body.velocity.x = -100;
-        this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
-        this.enemy.body.gravity.y = 500;
-        this.enemy.body.collideWorldBounds = true;
-        
-		this.enemy.animations.add('left', [6,7,8], 5, true);
-        this.enemy.animations.play('left');
-        this.enemy.anchor.set(0.5);
+ 
+    score: function () {
+        this.scoreText = this.game.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText.fixedToCamera = true;
     },
 
     createPlatforms: function () {
