@@ -29,17 +29,21 @@ MyGame.Game = function (game) {
     this.platforms;
     this.core;
     this.skin;
-    this.enemy;
     this.timer;
-
+    this.enemies;
+    this.plateformArray;
+    this.minX;
+    this.maxX;
     var bullets;
     var bulletTime = 0;
+    var kill = true;
 	
 };
 
 MyGame.Game.prototype = {
 
     create: function (game) {
+        //this.load.spritesheet('enemy', 'assets/ennemy.png', 64, 64);
 
 
         this.en = new Enemy(game);
@@ -98,17 +102,33 @@ MyGame.Game.prototype = {
 //creation aleatoire des ennemies 
 
         this.enemyArray = new Array();
-        for(var i =0;i<25;i++) {
-                posX  = Math.random() * 4800;
-                posY = Math.random() * 500;
-                this.enemyArray.push(new Enemy(this.game, posX,posY));
+        this.enemies = this.game.add.group();
 
+        for(var i =0;i<10;i++) {
+            //console.log('coucou');
+                posX  = Math.random() * 4800 + 100;
+            //    posX = 800;
+                posY = Math.random() * 900;
+                //tmp = new Enemy(this.game, posX,posY)
+                //this.enemyArray.push(tmp);
+                this.enemies.create(posX,posY,'enemy');
+                //console.log(this.enemies);
+                //this.enemyArray[i].enemy.set('body.checkCollision.left',true);
         }
+        //this.enemies.checkCollision.left = true
+        //this.enemies.setAll('body.checkCollision.left',true);
+        this.enemies.enableBody = true;
+        this.game.physics.enable(this.enemies);
+        this.enemies.setAll('body.velocity.x',-100,true);
+        this.enemies.setAll('body.gravity.y',500,true);
+        this.enemies.callAll('animations.add', 'animations', 'left', [143,144,145,146,147,148,149,150], 10, true);
+        this.enemies.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
+        //this.game.physics.arcade.collide(this.enemies,this.platforms,null,this);
+        this.enemies.setAll('body.collideWorldBounds',true);
 
-        //setter la distance min et max de x si sur plateforme
-        for(var i = 0;i<this.enemyArray.length;i++){
-            this.enemyArray[i].verifierSurPlateforme(plateformArray);
-        }
+        this.game.physics.arcade.collide(this.enemies,this.player,this.verifierCollisionEnemy,this);
+        this.game.physics.arcade.collide(this.enemies,this.ground,null,this);
+
 
         // Bullets
         this.bullets = this.game.add.group();
@@ -134,39 +154,93 @@ MyGame.Game.prototype = {
 
 
         this.time = this.game.time.now;
+        //this.game.
     },
 
     update: function () {
 
-        this.en.action("mofo");
+            this.en.action("mofo");
 
-        var variable = this;
-        // Collisions
-        this.game.physics.arcade.collide(this.player.player, this.platforms, null, this.player.passerAtravers, this);
-        //this.game.physics.arcade.collide(this.enemy.enemy,this.platforms)
-        // Refresh changed values
-        this.player.player.body.velocity.x = 0;
-        this.player.player.body.acceleration.y = 0;
+            var variable = this;
+            // Collisions
+            this.game.physics.arcade.collide(this.player.player, this.platforms, null, this.player.passerAtravers, this);
+            this.game.physics.arcade.collide(this.enemies,this.ground);
+            // Refresh changed values
+            this.player.player.body.velocity.x = 0;
+            this.player.player.body.acceleration.y = 0;
 
-        this.player.movePlayer();
-        for (var i = 0; i < this.enemyArray.length; i++) {
-            this.enemyArray[i].moveEnemy();
-            this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.platforms);
+            this.player.movePlayer();
+            //for (var i = 0; i < this.enemyArray.length; i++) {
+                //this.enemyArray[i].moveEnemy();
+                this.game.physics.arcade.collide(this.enemies, this.platforms);
+                //this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.player, this.verifierCollisionEnemy());
+            //}
+            this.moveCamera();
+
+            this.game.physics.arcade.overlap(this.bullets, this.enemies, this.bulletVSenemy, null, this);
+            this.game.physics.arcade.overlap(this.player, this.enemies, this.verifierCollisionEnemy(), null, this);
+            this.game.physics.arcade.overlap(this.core, this.enemies, this.coreVSenemy, null, this);
+            this.game.physics.arcade.overlap(this.enemies, this.skin, this.enemyVSskin, null, this);
+
+
+            //faire tirer le bonhomme :
+            if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
+                this.fire();
+            }
+
+        function verifierSortirPlateforme(minX, maxX, param3) {
+            if(param3.x < minX) {
+                param3.body.velocity.x = 100;
+                //console.log('t beau');
+            }
         }
-        this.moveCamera();
 
-        //this.game.physics.arcade.overlap(this.player, this.enemy, this.verifierCollisionEnemy, null, this);
+        for(var z=0;z<this.enemies.length;z++){
+                enemy = this.enemies.getAt(z);
 
-        this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
-        this.game.physics.arcade.overlap(this.player, this.enemy, this.verifierCollisionEnemy(), null, this);
-        this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
-        this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
+                if (this.enemies.getAt(z).body.velocity.x > 0)
+                {
+                    this.enemies.getAt(z).animations.play('left');
+                }
+                else if (this.enemies.getAt(z).body.velocity.x < 0)
+                {
+                    this.enemies.getAt(z).animations.play('right');
+                }
+
+                for(var i=0;i<this.platforms.length;i++){
+                        if ((this.enemies.getAt(z).body.x <= this.platforms.getAt(i).x
+                            || this.enemies.getAt(z).body.x >= this.platforms.getAt(i).x + this.platforms.getAt(i).width)
+                                //&& enemy.body.velocity.y == 0
+                        ) {
+                            //console.log('coucou');
+                            this.minX = this.platforms.getAt(i).x;
+                            this.maxX = this.platforms.getAt(i).x + this.platforms.getAt(i).width;
+                            verifierSortirPlateforme(this.minX,this.maxX,this.enemies.getAt(z));
+                            //console.log("plateforme["+i+"] : " +  this.platforms.getAt(i).x + this.platforms.getAt(i).width);
+                            //this.enemies.getAt(z).body.velocity.x *= -1;
+                        }
+                        else /*if(this.enemies.getAt(z).body.y == this.platforms.getAt(i).y)*/{
+                            //console.log('allo');
+                            this.minX = 130;
+                            this.maxX = 4800;
+                            verifierSortirPlateforme(130,4800,enemy);
+
+                        }
 
 
-        //faire tirer le bonhomme :
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
-            this.fire();
-        }
+
+
+                }
+                if(this.enemies.getAt(z).body.x < this.minX || this.enemies.getAt(z).body.x > this.maxX) {
+                    //console.log(this.maxX);
+                    this.enemies.getAt(z).body.velocity.x *= -1;
+
+                    //console.log('switch side');
+                }
+
+            }
+
+
 
 
     },
@@ -207,22 +281,21 @@ MyGame.Game.prototype = {
 
     enemyWave: function () {
 
-        this.enemy = new Enemy(1000,500,this.game);
-        this.enemy.body.velocity.x = -100;
-        this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
-        this.enemy.body.gravity.y = 500;
-        this.enemy.body.collideWorldBounds = true;
-        
-		this.enemy.animations.add('left', [6,7,8], 5, true);
-        this.enemy.animations.play('left');
-        this.enemy.anchor.set(0.5);
+        //this.enemy = new Enemy(1000,500,this.game);
+        //this.enemy.body.velocity.x = -100;
+        //this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
+        //this.enemy.body.gravity.y = 500;
+        //this.enemy.body.collideWorldBounds = true;
+        //
+        //this.enemy.animations.add('left', [6,7,8], 5, true);
+        //this.enemy.animations.play('left');
+        //this.enemy.anchor.set(0.5);
     },
 
     createPlatforms: function () {
 
         x = 300;
-        plateformArray = new Array();
-
+        this.plateformArray = new Array();
         function verifierPlateformePosition(x, y) {
             if (y < 910 || x < 250) {
                 return true;
@@ -250,14 +323,15 @@ MyGame.Game.prototype = {
                     tmp = Math.random(0.4, 0.5);
                 } while (tmp < 0.4);
 
-            if(verifierVoisinPlateforme(plateformArray,x,y, tmp)) {
+            if(verifierVoisinPlateforme(this.plateformArray,x,y, tmp)) {
                 //this.p = this.platforms.create(x, y, 'platform');
                 //this.p.scale.setTo(tmp, 0.5);
-                plateformArray.push(this.platforms.create(x, y, 'platform'));
+                this.plateformArray.push(this.platforms.create(x, y, 'platform'));
                 //console.log(plateformArray.length);
             }
 
         }
+        //this.platforms.create(570,1000,'platform');
     },
 
 
@@ -303,22 +377,23 @@ MyGame.Game.prototype = {
     },
 
 
-    verifierCollisionEnemy: function(){
-        //console.log("coucou");
-        //for(var i = 0;i < this.enemyArray; i++){
-        //    if(this.enemyArray[i].player.alive()) {
-        //        this.enemyArray[i].player.kill();
-        //        console.log('aca vads');
-        //    }
-        //}
-        console.log(this.player);
-        //console.log('test');
-        if (this.player.alive) {
-            this.player.kill();
-            console.log('kill');
+    verifierCollisionEnemy: function(enemy,player){
+
+        this.player.player.kill();
+        //console.log('dead');
+        if(this.kill == true){
+            this.kill = false;
         }
-        this.player.player.revive();
+        this.game.time.events.add(Phaser.Timer.SECOND, function ()
+        {
+            kill = true;
+        });
+            //this.player.player.revive(150,1100);
+
+
+
     }
+
 
 
 }
