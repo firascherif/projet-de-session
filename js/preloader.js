@@ -9,6 +9,7 @@ MyGame.Preloader.prototype = {
 
         this.stage.backgroundColor = '#78fdff';
 
+        this.game.load.image('menu','assets/menu.png')
         this.add.audio('maingame');
 		this.load.image('core', 'assets/core.png');
         this.load.image('background', 'assets/Background3.png');
