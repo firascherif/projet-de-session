@@ -56,12 +56,14 @@ MyGame.Game.prototype = {
         // La physique du jeu ARCADE
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        this.plateformeLimite = this.game.add.group();
 
         // Core n Skin
         this.core = this.game.add.sprite(0, 600, 'core');
         this.skin = this.game.add.sprite(60, 600, 'skin');
         this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
+        this.game.physics.enable(this.plateformeLimite, Phaser.Physics.ARCADE);
 
        
         this.game.world.setBounds(0, 0, 5400, 1200);
@@ -73,15 +75,26 @@ MyGame.Game.prototype = {
         //// Ground
         this.ground = this.platforms.create(0, 1180, 'platform2');
         this.ground.scale.setTo(10, 2);
-        
+
+
+        //this.plateformeLimite.setAll('body.immovable',true);
+        this.plateformeLimite.setAll('body.checkCollision.left',true);
+        this.plateformeLimite.setAll('body.checkCollision.right',true);
+        this.plateformeLimite.setAll('body.checkCollision.down',false);
+        this.plateformeLimite.setAll('body.checkCollision.up',false);
+        this.plateformeLimite.setAll('body.checkCollision.up',false);
+        this.plateformeLimite.setAll('visible',false);
+        this.plateformeLimite.enableBody = true;
+        //this.plateformeLimite.setAll('scale.setTo',0.1,0.2);
+
 
         //// Ledges
         this.createPlatforms();
 
         this.platforms.setAll('body.immovable', true);
-        this.platforms.setAll('body.checkCollision.down', false);
-        this.platforms.setAll('body.checkCollision.left', false);
-        this.platforms.setAll('body.checkCollision.right', false);
+        //this.platforms.setAll('body.checkCollision.down', false);
+        //this.platforms.setAll('body.checkCollision.left', false);
+        //this.platforms.setAll('body.checkCollision.right', false);
 
         // Player
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -99,14 +112,14 @@ MyGame.Game.prototype = {
         this.enemyArray = new Array();
         this.enemies = this.game.add.group();
 
-        for(var i =0;i<10;i++) {
+        for(var i =0;i<25;i++) {
             //console.log('coucou');
                 posX  = Math.random() * 4800 + 100;
             //    posX = 800;
                 posY = Math.random() * 900;
                 //tmp = new Enemy(this.game, posX,posY)
                 //this.enemyArray.push(tmp);
-                this.enemies.create(posX,posY,'enemy');
+                var w = this.enemies.create(posX,posY,'enemy');
                 //console.log(this.enemies);
                 //this.enemyArray[i].enemy.set('body.checkCollision.left',true);
         }
@@ -118,11 +131,14 @@ MyGame.Game.prototype = {
         this.enemies.setAll('body.gravity.y',500,true);
         this.enemies.callAll('animations.add', 'animations', 'left', [143,144,145,146,147,148,149,150], 10, true);
         this.enemies.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
-        //this.game.physics.arcade.collide(this.enemies,this.platforms,null,this);
         this.enemies.setAll('body.collideWorldBounds',true);
+        this.enemies.setAll('body.bounce.x',1,0);
 
-        this.game.physics.arcade.collide(this.enemies,this.player,this.verifierCollisionEnemy,this);
-        this.game.physics.arcade.collide(this.enemies,this.ground,null,this);
+
+        //this.game.physics.arcade.collide(this.enemies,this.player,this.verifierCollisionEnemy,this);
+        this.game.physics.arcade.collide(this.enemies,this.ground);
+        this.game.physics.arcade.collide(this.enemies,this.platforms);
+        this.game.physics.arcade.collide(this.enemies,this.plateformeLimite);
 
 
         // Bullets
@@ -153,87 +169,92 @@ MyGame.Game.prototype = {
     },
 
     update: function () {
+        if (this.game.physics.arcade.collide(this.player.player, this.enemies)) {
+            this.player.player.kill();
+            //this.enemies
+        }
+        this.en.action("mofo");
 
-            this.en.action("mofo");
-
-            var variable = this;
-            // Collisions
-            this.game.physics.arcade.collide(this.player.player, this.platforms, null, this.player.passerAtravers, this);
-            this.game.physics.arcade.collide(this.enemies,this.ground);
-            // Refresh changed values
-            this.player.player.body.velocity.x = 0;
-            this.player.player.body.acceleration.y = 0;
-
-            this.player.movePlayer();
-            //for (var i = 0; i < this.enemyArray.length; i++) {
-                //this.enemyArray[i].moveEnemy();
-                this.game.physics.arcade.collide(this.enemies, this.platforms);
-                //this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.player, this.verifierCollisionEnemy());
-            //}
-            this.moveCamera();
-
-            this.game.physics.arcade.overlap(this.bullets, this.enemies, this.bulletVSenemy, null, this);
-            this.game.physics.arcade.overlap(this.player, this.enemies, this.verifierCollisionEnemy(), null, this);
-            this.game.physics.arcade.overlap(this.core, this.enemies, this.coreVSenemy, null, this);
-            this.game.physics.arcade.overlap(this.enemies, this.skin, this.enemyVSskin, null, this);
+        var variable = this;
+        // Collisions
+        this.game.physics.arcade.collide(this.player.player, this.platforms, null, this.player.passerAtravers, this);
+        this.game.physics.arcade.collide(this.enemies, this.ground);
+        this.game.physics.arcade.collide(this.enemies, this.platforms);
+        this.game.physics.arcade.collide(this.enemies, this.plateformeLimite);
+        //for (var i = 0; i < this.enemies.length; i++) {
+        //    if (this.game.physics.arcade.collide(this.enemies.getAt(i), this.platforms)) {
+        //        this.enemies.getAt(i).body.velocity.x *= -1;
+        //        console.log('vire de bord');
+        //    }
+        //}
 
 
-            //faire tirer le bonhomme :
-            if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
-                this.fire();
+        // Refresh changed values
+        this.player.player.body.velocity.x = 0;
+        this.player.player.body.acceleration.y = 0;
+
+        this.player.movePlayer();
+        //for (var i = 0; i < this.enemyArray.length; i++) {
+        //this.enemyArray[i].moveEnemy();
+        //this.game.physics.arcade.collide(this.enemies, this.platforms);
+        //this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.player, this.verifierCollisionEnemy());
+        //}
+        this.moveCamera();
+
+        this.game.physics.arcade.overlap(this.bullets, this.enemies, this.bulletVSenemy, null, this);
+        //this.game.physics.arcade.overlap(this.player, this.enemies, this.verifierCollisionEnemy, null, this);
+        this.game.physics.arcade.overlap(this.core, this.enemies, this.coreVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.enemies, this.skin, this.enemyVSskin, null, this);
+
+
+        //faire tirer le bonhomme :
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
+            this.fire();
+        }
+
+        for (var z = 0; z < this.enemies.length; z++) {
+            enemy = this.enemies.getAt(z);
+
+            if (this.enemies.getAt(z).body.velocity.x > 0) {
+                this.enemies.getAt(z).animations.play('left');
             }
-
-        function verifierSortirPlateforme(minX, maxX, param3) {
-            if(param3.x < minX) {
-                param3.body.velocity.x = 100;
-                //console.log('t beau');
+            else if (this.enemies.getAt(z).body.velocity.x < 0) {
+                this.enemies.getAt(z).animations.play('right');
+            }
+            if (this.enemies.getAt(z).body.x < 130 || this.enemies.getAt(z).body.x > 4800) {
+                this.enemies.getAt(z).body.velocity.x *= -1;
             }
         }
 
-        for(var z=0;z<this.enemies.length;z++){
-                enemy = this.enemies.getAt(z);
-
-                if (this.enemies.getAt(z).body.velocity.x > 0)
-                {
-                    this.enemies.getAt(z).animations.play('left');
-                }
-                else if (this.enemies.getAt(z).body.velocity.x < 0)
-                {
-                    this.enemies.getAt(z).animations.play('right');
-                }
-
-                for(var i=0;i<this.platforms.length;i++){
-                        if ((this.enemies.getAt(z).body.x <= this.platforms.getAt(i).x
-                            || this.enemies.getAt(z).body.x >= this.platforms.getAt(i).x + this.platforms.getAt(i).width)
-                                //&& enemy.body.velocity.y == 0
-                        ) {
-                            //console.log('coucou');
-                            this.minX = this.platforms.getAt(i).x;
-                            this.maxX = this.platforms.getAt(i).x + this.platforms.getAt(i).width;
-                            verifierSortirPlateforme(this.minX,this.maxX,this.enemies.getAt(z));
-                            //console.log("plateforme["+i+"] : " +  this.platforms.getAt(i).x + this.platforms.getAt(i).width);
-                            //this.enemies.getAt(z).body.velocity.x *= -1;
-                        }
-                        else /*if(this.enemies.getAt(z).body.y == this.platforms.getAt(i).y)*/{
-                            //console.log('allo');
-                            this.minX = 130;
-                            this.maxX = 4800;
-                            verifierSortirPlateforme(130,4800,enemy);
-
-                        }
-
-
-
-
-                }
-                if(this.enemies.getAt(z).body.x < this.minX || this.enemies.getAt(z).body.x > this.maxX) {
-                    //console.log(this.maxX);
-                    this.enemies.getAt(z).body.velocity.x *= -1;
-
-                    //console.log('switch side');
-                }
-
-            }
+        //
+        //        for(var i=0;i<this.platforms.length;i++){
+        //                if ((this.enemies.getAt(z).body.x <= this.platforms.getAt(i).x
+        //                    || this.enemies.getAt(z).body.x >= this.platforms.getAt(i).x + this.platforms.getAt(i).width)
+        //                        //&& enemy.body.velocity.y == 0
+        //                ) {
+        //                    //console.log('coucou');
+        //                    this.minX = this.platforms.getAt(i).x;
+        //                    this.maxX = this.platforms.getAt(i).x + this.platforms.getAt(i).width;
+        //                    verifierSortirPlateforme(this.minX,this.maxX,this.enemies.getAt(z));
+        //                    //console.log("plateforme["+i+"] : " +  this.platforms.getAt(i).x + this.platforms.getAt(i).width);
+        //                    //this.enemies.getAt(z).body.velocity.x *= -1;
+        //                }
+        //                else if(this.enemies.getAt(z).body.y == this.platforms.getAt(i).y){
+        //                    //console.log('allo');
+        //                    this.minX = 130;
+        //                    this.maxX = 4800;
+        //                    verifierSortirPlateforme(130,4800,enemy);
+        //
+        //                }
+        //        }
+        //        if(this.enemies.getAt(z).body.x < this.minX || this.enemies.getAt(z).body.x > this.maxX) {
+        //            //console.log(this.maxX);
+        //            this.enemies.getAt(z).body.velocity.x *= -1;
+        //
+        //            //console.log('switch side');
+        //        }
+        //
+        //    }
 
 
 
@@ -321,12 +342,32 @@ MyGame.Game.prototype = {
             if(verifierVoisinPlateforme(this.plateformArray,x,y, tmp)) {
                 //this.p = this.platforms.create(x, y, 'platform');
                 //this.p.scale.setTo(tmp, 0.5);
-                this.plateformArray.push(this.platforms.create(x, y, 'platform'));
-                //console.log(plateformArray.length);
+                var b = this.plateformeLimite.create(x,y-50,'core');
+                var c = this.plateformeLimite.create(x+190,y-50,'core');
+                var d = this.platforms.create(x, y, 'platform');
+                b.body.immovable = true;
+                c.body.immovable = true;
+                d.body.immovable = true;
+                d.body.checkCollision.down = false;
+                d.body.checkCollision.right = true;
+                b.body.checkCollision.left = true;
+                c.body.checkCollision.left = true;
+                b.body.checkCollision.right = true;
+                b.body.checkCollision.up = false;
+                c.body.checkCollision.right = true;
+                c.body.checkCollision.up = false;
+                this.game.physics.arcade.collide(b,this.enemies);
+                this.game.physics.arcade.collide(c,this.enemies);
+                b.visible = true;
+                b.exists = true;
+                c.visible = true;
+                c.exists = true;
+                b.scale.setTo(0.0001,0.1);
+                c.scale.setTo(0.0001,0.1);
+                this.plateformArray.push(d);
             }
 
         }
-        //this.platforms.create(570,1000,'platform');
     },
 
 
@@ -374,16 +415,16 @@ MyGame.Game.prototype = {
 
     verifierCollisionEnemy: function(enemy,player){
 
-        this.player.player.kill();
+        //enemy.kill();
+        //player.player.kill();
         //console.log('dead');
-        if(this.kill == true){
-            this.kill = false;
-        }
-        this.game.time.events.add(Phaser.Timer.SECOND, function ()
-        {
-            kill = true;
-        });
-            //this.player.player.revive(150,1100);
+        //if(this.kill == true){
+        //    this.kill = false;
+        //}
+        //this.game.time.events.add(Phaser.Timer.SECOND, function ()
+        //{
+        //    kill = true;
+        //});
 
 
 
