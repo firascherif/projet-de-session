@@ -36,7 +36,7 @@ MyGame.Game = function (game) {
     this.minX;
     this.maxX;
     var bullets;
-    var bulletTime = 0;
+    this.bulletTime = 0;
     this.plateformeLimite;
 
     var star
@@ -228,40 +228,7 @@ MyGame.Game.prototype = {
                 this.enemies.getAt(z).body.velocity.x *= -1;
             }
         }
-
-        //
-        //        for(var i=0;i<this.platforms.length;i++){
-        //                if ((this.enemies.getAt(z).body.x <= this.platforms.getAt(i).x
-        //                    || this.enemies.getAt(z).body.x >= this.platforms.getAt(i).x + this.platforms.getAt(i).width)
-        //                        //&& enemy.body.velocity.y == 0
-        //                ) {
-        //                    //console.log('coucou');
-        //                    this.minX = this.platforms.getAt(i).x;
-        //                    this.maxX = this.platforms.getAt(i).x + this.platforms.getAt(i).width;
-        //                    verifierSortirPlateforme(this.minX,this.maxX,this.enemies.getAt(z));
-        //                    //console.log("plateforme["+i+"] : " +  this.platforms.getAt(i).x + this.platforms.getAt(i).width);
-        //                    //this.enemies.getAt(z).body.velocity.x *= -1;
-        //                }
-        //                else if(this.enemies.getAt(z).body.y == this.platforms.getAt(i).y){
-        //                    //console.log('allo');
-        //                    this.minX = 130;
-        //                    this.maxX = 4800;
-        //                    verifierSortirPlateforme(130,4800,enemy);
-        //
-        //                }
-        //        }
-        //        if(this.enemies.getAt(z).body.x < this.minX || this.enemies.getAt(z).body.x > this.maxX) {
-        //            //console.log(this.maxX);
-        //            this.enemies.getAt(z).body.velocity.x *= -1;
-        //
-        //            //console.log('switch side');
-        //        }
-        //
-        //    }
-
-
-
-
+        
     },
 
 
