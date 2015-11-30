@@ -175,17 +175,13 @@ MyGame.Game.prototype = {
         //this.cursors = this.game.input.keyboard.createCursorKeys();
         this.actionKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
         this.actionKey3 = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
-        this.actionKey3.onDown.add(creationBullet, this);
-
-        function creationBullet() {
-            this.bullets.add(new Bullet(30, 30, this.game));
-        }
-
+        //this.actionKey3.onDown.add(creationBullet, this);
 
         this.time = this.game.time.now;
     },
 
     update: function () {
+
         if (this.game.physics.arcade.collide(this.player.player, this.enemies)) {
             this.player.player.kill();
             //this.enemies
@@ -209,7 +205,7 @@ MyGame.Game.prototype = {
         this.moveCamera();
 
 
-        this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
+        //this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
         //this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
 
@@ -300,19 +296,6 @@ MyGame.Game.prototype = {
                 this.game.camera.y += 15;
             }
         }
-    },
-
-    enemyWave: function () {
-
-        this.enemy = new Enemy(1000,500,this.game);
-        this.enemy.body.velocity.x = -100;
-        this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
-        this.enemy.body.gravity.y = 500;
-        this.enemy.body.collideWorldBounds = true;
-        
-		this.enemy.animations.add('left', [6,7,8], 5, true);
-        this.enemy.animations.play('left');
-        this.enemy.anchor.set(0.5);
     },
 
     createPlatforms: function () {
@@ -408,10 +391,24 @@ MyGame.Game.prototype = {
         }
 		*/
 		
-            // fire it
-            bullet.reset(player.x, player.y + 8);
-            bullet.body.velocity.y = -400;
-            bulletTime = game.time.now + 200;
+            //// fire it
+            //bullet.reset(player.x, player.y + 8);
+            //bullet.body.velocity.y = -400;
+            //bulletTime = game.time.now + 200;
+        console.log('fired');
+            if (this.game.time.now > this.bulletTime)
+            {
+                bullet = this.bullets.getFirstExists(false);
+
+                if (bullet)
+                {
+                    bullet.reset(this.player.player.x + 6, this.player.player.y - 8);
+                    bullet.body.velocity.y = -300;
+                    bulletTime = this.game.time.now + 150;
+                }
+            }
+
+
         
     },
 	
