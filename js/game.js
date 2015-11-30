@@ -134,12 +134,12 @@ MyGame.Game.prototype = {
 
         for(var i =0;i<25;i++) {
             //console.log('coucou');
-                posX  = Math.random() * 4800 + 100;
+                posX  = Math.random() * 4800 + 400;
             //    posX = 800;
                 posY = Math.random() * 900;
                 //tmp = new Enemy(this.game, posX,posY)
                 //this.enemyArray.push(tmp);
-                var w = this.enemies.create(posX,posY,'enemy');
+                var w = this.enemies.create(posX+400,posY,'enemy');
                 //console.log(this.enemies);
                 //this.enemyArray[i].enemy.set('body.checkCollision.left',true);
         }
