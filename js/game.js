@@ -29,12 +29,15 @@ MyGame.Game = function (game) {
     this.platforms;
     this.core;
     this.skin;
+    this.star;
+    this.stars;
     this.enemy;
     this.timer;
 
     var bullets;
     var bulletTime = 0;
 
+    var star
     var score = 0;
     var scoreText;
 	
@@ -61,6 +64,19 @@ MyGame.Game.prototype = {
         this.skin = this.game.add.sprite(60, 600, 'skin');
         this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
+
+        //stars
+        this.stars = this.game.add.group();
+        this.stars.enableBody = true;
+
+
+        for (var i = 0; i < 12; i++)
+        {
+            this.star = this.stars.create(i * 70, 0, 'star');
+            this.star.body.gravity.y = 6;
+            this.star.body.bounce.y = 0.7 + Math.random() * 0.2;
+        }
+
 
        
         this.game.world.setBounds(0, 0, 5400, 1200);
@@ -160,7 +176,10 @@ MyGame.Game.prototype = {
         this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
         this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
-
+    
+        this.game.physics.arcade.collide(this.stars, this.platforms);
+        this.game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+    
 
         //faire tirer le bonhomme :
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
@@ -186,6 +205,7 @@ MyGame.Game.prototype = {
         //this.gui.fixedToCamera = true;
     },
 
+    
     enemyVSskin: function (skin, enemy) {
 
         //enemy.body.velocity.x = -10;
@@ -212,6 +232,17 @@ MyGame.Game.prototype = {
         this.scoreText = this.game.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#000' });
         this.scoreText.fixedToCamera = true;
     },
+
+    collectStar : function (player, star) {
+
+    // Removes the star from the screen
+    star.kill();
+
+    //  Add and update the score
+    score += 10;
+    scoreText.text = 'Score: ' + score;
+    },
+
 
     createPlatforms: function () {
 
