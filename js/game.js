@@ -35,6 +35,7 @@ MyGame.Game = function (game) {
     this.plateformArray;
     this.minX;
     this.maxX;
+    this.door;
     var bullet;
     this.bulletTime = 0;
     this.plateformeLimite;
@@ -72,7 +73,12 @@ MyGame.Game.prototype = {
         this.stars = this.game.add.group();
         this.stars.enableBody = true;
 
-
+        this.door = this.game.add.group();
+        this.door = this.door.create(5322,600,'door');
+        //this.game.physics.enable(this.door,Phaser.Physics.ARCADE);
+        this.door.enableBody = true;
+        this.door.immovable=true;
+        //this.door.checkCollision.left = true;
         for (var i = 0; i < 12; i++)
         {
             this.star = this.stars.create(i * 400, 20, 'star');
@@ -83,6 +89,7 @@ MyGame.Game.prototype = {
 
 
         this.game.world.setBounds(0, 0, 5400, 1200);
+
 
         // Platforms
         this.platforms = this.game.add.group();
@@ -132,7 +139,7 @@ MyGame.Game.prototype = {
         this.platformArray = new Array();
         this.enemies = this.game.add.group();
 
-        for(var i =0;i<25;i++) {
+        for(var i =0;i<2;i++) {
             //console.log('coucou');
                 posX  = Math.random() * 4800 + 400;
             //    posX = 800;
@@ -180,10 +187,34 @@ MyGame.Game.prototype = {
         this.time = this.game.time.now;
     },
 
-    update: function () {
+    resetEnemies: function (enemy) {
+        if(this.enemy != null)
+            enemy.revive();
+        enemy.body.x = Math.random() * 4800 + 400;
+        enemy.body.y =  Math.random() * 900;
+        enemy.body.velocity.x = -100;
+    },
 
+    update: function () {
+        //temporaire je crois***
+        if(this.player.player.body.x >= 5330) {
+            this.player.player.kill();
+            this.player.levelOver = true;
+            console.log("Loader le prochain niveau");
+        }
+
+        if(this.player.levelOver){
+            this.enemies.forEachDead(this.resetEnemies,this);
+            this.player.player.body.x = 200;
+            this.player.player.body.y = 600;
+            this.player.player.revive();
+            this.player.levelOver = false;
+            //this.player.player.reset(200,600);
+
+        }
         if (this.game.physics.arcade.collide(this.player.player, this.enemies)) {
             this.player.player.kill();
+            this.player.levelOver = true;
             //this.enemies
         }
         this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy);
@@ -202,13 +233,12 @@ MyGame.Game.prototype = {
         this.game.physics.arcade.collide(this.enemies, this.ground);
         this.game.physics.arcade.collide(this.enemies, this.platforms);
         this.game.physics.arcade.collide(this.enemies, this.plateformeLimite);
-        //if((this.game.physics.arcade.collide(this.bullets, this.platforms) ||
-        //this.game.physics.arcade.collide(this.bullets, this.enemies))){
-        //    console.log('tuer ennemy');
+        this.game.physics.arcade.collide(this.player, this.door);
+
+
+        //if(this.games.physics.arcade.collide(this.player,this.door)){
+        //    console.log('fin du niveau');
         //}
-        //this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy, null, this);
-
-
 
         // Refresh changed values
         this.player.player.body.velocity.x = 0;

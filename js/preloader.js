@@ -21,6 +21,7 @@ MyGame.Preloader.prototype = {
         this.load.image('test', 'assets/bullet.png');
         this.load.audio('maingame', 'assets/audio/maingame.mp3');
         this.load.image('star', 'assets/star.png');
+        this.load.image('door','assets/porte.png');
         
     },
 
