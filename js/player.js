@@ -10,10 +10,10 @@ player = function(game, cursors){
 	this.player.body.collideWorldBounds = true;
 
 
-	//this.player.animations.add('idleRight', [7,8,9,10,11,12], 5, true);
+	this.player.animations.add('idleRight', [143], 1, true);
 	//var tmp = new Phaser.Animation(this.game,this.player,'test',"assets/player.png",[7,8,9,10,11,12],true);
 	//this.player.animations.add(tmp);
-	//this.player.animations.add('idleLeft', [29,30,31,32,33,34,35], 5, true);
+	this.player.animations.add('idleLeft', [117], 1, true);
 	this.player.animations.add('right', [143,144,145,146,147,148,149,150], 10, true);
 	this.player.animations.add('left', [117,118,119,120,121,122,123,124], 10, true);
 	//this.player.animations.play('idle', 7, true);
@@ -47,24 +47,9 @@ player.prototype.movePlayer = function(){
 			this.player.animations.play('right');
 			this.playerFacing = 'right';
 		}
-	}else 
+	}else
 	{
-
-		if (this.playerFacing !== 'idle')
-		{
-			this.player.animations.stop();
-
-			if (this.playerFacing === 'left')
-			{
-			   //this.player.animations.play('idleLeft');
-			}
-			else
-			{
-			   //this.player.animations.play('idleRight');
-			}
-
-			this.playerFacing = 'idle';
-	   }
+        this.player.animations.stop();
 	}
 
     if (this.cursors.up.isDown && this.player.body.touching.down)

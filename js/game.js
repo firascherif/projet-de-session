@@ -35,7 +35,7 @@ MyGame.Game = function (game) {
     this.plateformArray;
     this.minX;
     this.maxX;
-    var bullets;
+    var bullet;
     this.bulletTime = 0;
     this.plateformeLimite;
 
@@ -168,7 +168,7 @@ MyGame.Game.prototype = {
         this.bullets.setAll('anchor.y', 1);
         this.bullets.setAll('outOfBoundsKill', true);
         this.bullets.setAll('checkWorldBounds', true);
-
+        this.bullets.setAll('exists',false);
         //this.enemyWave();
 
         // Initializing Controls
@@ -186,6 +186,14 @@ MyGame.Game.prototype = {
             this.player.player.kill();
             //this.enemies
         }
+        this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy);
+
+        //for(var i=0;i<this.bullets.length;i++) {
+        //    this.game.physics.arcade.collide(this.bullets.getFirstAlive(), this.enemies,this.flecheCollisionEnemy,this);
+        //        //this.bullets.getFirstAlive().kill();
+        //}
+
+
         this.en.action("mofo");
 
         var variable = this;
@@ -194,6 +202,12 @@ MyGame.Game.prototype = {
         this.game.physics.arcade.collide(this.enemies, this.ground);
         this.game.physics.arcade.collide(this.enemies, this.platforms);
         this.game.physics.arcade.collide(this.enemies, this.plateformeLimite);
+        //if((this.game.physics.arcade.collide(this.bullets, this.platforms) ||
+        //this.game.physics.arcade.collide(this.bullets, this.enemies))){
+        //    console.log('tuer ennemy');
+        //}
+        //this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy, null, this);
+
 
 
         // Refresh changed values
@@ -228,7 +242,7 @@ MyGame.Game.prototype = {
                 this.enemies.getAt(z).body.velocity.x *= -1;
             }
         }
-        
+
     },
 
 
@@ -281,7 +295,6 @@ MyGame.Game.prototype = {
             for (var i = 0; i < array.length; i++) {
                 if (array[i].x + 300 >= x - scale && array[i].y + 350 >= y &&
                     array[i].x - 100 <= x - scale && array[i].y - 215 <= y){
-                    console.log("false");
                     return false;
                 }
             }
@@ -362,16 +375,27 @@ MyGame.Game.prototype = {
             //bullet.reset(player.x, player.y + 8);
             //bullet.body.velocity.y = -400;
             //bulletTime = game.time.now + 200;
-        console.log('fired');
+        console.log(this.bulletTime);
+
             if (this.game.time.now > this.bulletTime)
             {
                 bullet = this.bullets.getFirstExists(false);
-
-                if (bullet)
+                this.resetBullet(bullet);
+                console.log(this.player.playerFacing);
+                if (bullet && this.player.playerFacing !== "idle")
                 {
-                    bullet.reset(this.player.player.x + 6, this.player.player.y - 8);
-                    bullet.body.velocity.y = -300;
-                    bulletTime = this.game.time.now + 150;
+                    bullet.reset(this.player.player.x + 6, this.player.player.y);
+                    bullet.lifespan = 2000;
+                    if(this.player.playerFacing === "left") {
+                            //bullet.reset();
+                            bullet.scale.setTo(-1);
+                        bullet.body.velocity.x = -300;
+                    }
+                    else if(this.player.playerFacing === "right") {
+                        //bullet.reset();
+                        bullet.body.velocity.x = 300;
+                    }
+                    this.bulletTime = this.game.time.now + 300;
                 }
             }
 
@@ -385,19 +409,10 @@ MyGame.Game.prototype = {
     },
 
 
-    verifierCollisionEnemy: function(enemy,player){
+    flecheCollisionEnemy: function(bullet, enemy){
 
-        //enemy.kill();
-        //player.player.kill();
-        //console.log('dead');
-        //if(this.kill == true){
-        //    this.kill = false;
-        //}
-        //this.game.time.events.add(Phaser.Timer.SECOND, function ()
-        //{
-        //    kill = true;
-        //});
-
+        enemy.kill();
+        bullet.kill();
 
 
     }
