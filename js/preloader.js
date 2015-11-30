@@ -20,6 +20,8 @@ MyGame.Preloader.prototype = {
         this.load.spritesheet('enemy', 'assets/ennemy.png', 64, 64);
         this.load.image('test', 'assets/bullet.png');
         this.load.audio('maingame', 'assets/audio/maingame.mp3');
+        this.load.image('star', 'assets/star.png');
+        
     },
 
     create: function () {

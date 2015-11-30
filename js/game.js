@@ -29,6 +29,7 @@ MyGame.Game = function (game) {
     this.platforms;
     this.core;
     this.skin;
+    this.enemy;
     this.timer;
     this.enemies;
     this.plateformArray;
@@ -36,14 +37,17 @@ MyGame.Game = function (game) {
     this.maxX;
     var bullets;
     var bulletTime = 0;
+
+    var star
+    var score = 0;
+    var scoreText;
     var kill = true;
-	
+
 };
 
 MyGame.Game.prototype = {
 
     create: function (game) {
-        //this.load.spritesheet('enemy', 'assets/ennemy.png', 64, 64);
 
 
         this.en = new Enemy(game);
@@ -56,16 +60,27 @@ MyGame.Game.prototype = {
         // La physique du jeu ARCADE
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        this.plateformeLimite = this.game.add.group();
 
         // Core n Skin
         this.core = this.game.add.sprite(0, 600, 'core');
         this.skin = this.game.add.sprite(60, 600, 'skin');
         this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
-        this.game.physics.enable(this.plateformeLimite, Phaser.Physics.ARCADE);
 
-       
+        //stars
+        this.stars = this.game.add.group();
+        this.stars.enableBody = true;
+
+
+        for (var i = 0; i < 12; i++)
+        {
+            this.star = this.stars.create(i * 400, 20, 'star');
+            this.star.body.gravity.y = 6;
+            this.star.body.bounce.y = 0.2 + Math.random() * 0.2;
+        }
+
+
+
         this.game.world.setBounds(0, 0, 5400, 1200);
 
         // Platforms
@@ -75,7 +90,7 @@ MyGame.Game.prototype = {
         //// Ground
         this.ground = this.platforms.create(0, 1180, 'platform2');
         this.ground.scale.setTo(10, 2);
-
+        
 
         //this.plateformeLimite.setAll('body.immovable',true);
         this.plateformeLimite.setAll('body.checkCollision.left',true);
@@ -91,15 +106,19 @@ MyGame.Game.prototype = {
         //// Ledges
         this.createPlatforms();
 
+        //score
+        this.score();
+
+
         this.platforms.setAll('body.immovable', true);
-        //this.platforms.setAll('body.checkCollision.down', false);
-        //this.platforms.setAll('body.checkCollision.left', false);
-        //this.platforms.setAll('body.checkCollision.right', false);
+        this.platforms.setAll('body.checkCollision.down', false);
+        this.platforms.setAll('body.checkCollision.left', false);
+        this.platforms.setAll('body.checkCollision.right', false);
 
         // Player
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.player = new player(this.game, this.cursors);
-        //this.game.physics.player.
+
         // Camera
         this.game.camera.y = 1000;
 
@@ -134,12 +153,10 @@ MyGame.Game.prototype = {
         this.enemies.setAll('body.collideWorldBounds',true);
         this.enemies.setAll('body.bounce.x',1,0);
 
-
-        //this.game.physics.arcade.collide(this.enemies,this.player,this.verifierCollisionEnemy,this);
-        this.game.physics.arcade.collide(this.enemies,this.ground);
-        this.game.physics.arcade.collide(this.enemies,this.platforms);
-        this.game.physics.arcade.collide(this.enemies,this.plateformeLimite);
-
+        //setter la distance min et max de x si sur plateforme
+        for(var i = 0;i<this.enemyArray.length;i++){
+            this.enemyArray[i].verifierSurPlateforme(plateformArray);
+        }
 
         // Bullets
         this.bullets = this.game.add.group();
@@ -165,7 +182,6 @@ MyGame.Game.prototype = {
 
 
         this.time = this.game.time.now;
-        //this.game.
     },
 
     update: function () {
@@ -194,17 +210,16 @@ MyGame.Game.prototype = {
         this.player.player.body.acceleration.y = 0;
 
         this.player.movePlayer();
-        //for (var i = 0; i < this.enemyArray.length; i++) {
-        //this.enemyArray[i].moveEnemy();
-        //this.game.physics.arcade.collide(this.enemies, this.platforms);
-        //this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.player, this.verifierCollisionEnemy());
-        //}
+        for (var i = 0; i < this.enemyArray.length; i++) {
+            this.enemyArray[i].moveEnemy();
+            this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.platforms);
+        }
         this.moveCamera();
 
-        this.game.physics.arcade.overlap(this.bullets, this.enemies, this.bulletVSenemy, null, this);
-        //this.game.physics.arcade.overlap(this.player, this.enemies, this.verifierCollisionEnemy, null, this);
-        this.game.physics.arcade.overlap(this.core, this.enemies, this.coreVSenemy, null, this);
-        this.game.physics.arcade.overlap(this.enemies, this.skin, this.enemyVSskin, null, this);
+
+        this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
 
 
         //faire tirer le bonhomme :
@@ -297,21 +312,22 @@ MyGame.Game.prototype = {
 
     enemyWave: function () {
 
-        //this.enemy = new Enemy(1000,500,this.game);
-        //this.enemy.body.velocity.x = -100;
-        //this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
-        //this.enemy.body.gravity.y = 500;
-        //this.enemy.body.collideWorldBounds = true;
-        //
-        //this.enemy.animations.add('left', [6,7,8], 5, true);
-        //this.enemy.animations.play('left');
-        //this.enemy.anchor.set(0.5);
+        this.enemy = new Enemy(1000,500,this.game);
+        this.enemy.body.velocity.x = -100;
+        this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
+        this.enemy.body.gravity.y = 500;
+        this.enemy.body.collideWorldBounds = true;
+        
+		this.enemy.animations.add('left', [6,7,8], 5, true);
+        this.enemy.animations.play('left');
+        this.enemy.anchor.set(0.5);
     },
 
     createPlatforms: function () {
 
         x = 300;
-        this.plateformArray = new Array();
+        plateformArray = new Array();
+
         function verifierPlateformePosition(x, y) {
             if (y < 910 || x < 250) {
                 return true;
@@ -323,7 +339,7 @@ MyGame.Game.prototype = {
             for (var i = 0; i < array.length; i++) {
                 if (array[i].x + 300 >= x - scale && array[i].y + 350 >= y &&
                     array[i].x - 100 <= x - scale && array[i].y - 215 <= y){
-                    //console.log("false");
+                    console.log("false");
                     return false;
                 }
             }
@@ -429,7 +445,6 @@ MyGame.Game.prototype = {
 
 
     }
-
 
 
 }
