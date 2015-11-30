@@ -37,6 +37,7 @@ MyGame.Game = function (game) {
     this.maxX;
     var bullets;
     var bulletTime = 0;
+    this.plateformeLimite;
 
     var star
     var score = 0;
@@ -60,11 +61,11 @@ MyGame.Game.prototype = {
         // La physique du jeu ARCADE
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-
+        this.plateformeLimite = this.game.add.group();
         // Core n Skin
-        this.core = this.game.add.sprite(0, 600, 'core');
-        this.skin = this.game.add.sprite(60, 600, 'skin');
-        this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
+        //this.core = this.game.add.sprite(0, 600, 'core');
+        this.skin = this.game.add.sprite(0, 600, 'skin');
+        //this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
 
         //stars
@@ -107,7 +108,7 @@ MyGame.Game.prototype = {
         this.createPlatforms();
 
         //score
-        this.score();
+        //this.score();
 
 
         this.platforms.setAll('body.immovable', true);
@@ -128,7 +129,7 @@ MyGame.Game.prototype = {
 
 //creation aleatoire des ennemies 
 
-        this.enemyArray = new Array();
+        this.platformArray = new Array();
         this.enemies = this.game.add.group();
 
         for(var i =0;i<25;i++) {
@@ -154,9 +155,9 @@ MyGame.Game.prototype = {
         this.enemies.setAll('body.bounce.x',1,0);
 
         //setter la distance min et max de x si sur plateforme
-        for(var i = 0;i<this.enemyArray.length;i++){
-            this.enemyArray[i].verifierSurPlateforme(plateformArray);
-        }
+        //for(var i = 0;i<this.enemyArray.length;i++){
+        //    this.enemyArray[i].verifierSurPlateforme(plateformArray);
+        //}
 
         // Bullets
         this.bullets = this.game.add.group();
@@ -197,12 +198,6 @@ MyGame.Game.prototype = {
         this.game.physics.arcade.collide(this.enemies, this.ground);
         this.game.physics.arcade.collide(this.enemies, this.platforms);
         this.game.physics.arcade.collide(this.enemies, this.plateformeLimite);
-        //for (var i = 0; i < this.enemies.length; i++) {
-        //    if (this.game.physics.arcade.collide(this.enemies.getAt(i), this.platforms)) {
-        //        this.enemies.getAt(i).body.velocity.x *= -1;
-        //        console.log('vire de bord');
-        //    }
-        //}
 
 
         // Refresh changed values
@@ -210,15 +205,12 @@ MyGame.Game.prototype = {
         this.player.player.body.acceleration.y = 0;
 
         this.player.movePlayer();
-        for (var i = 0; i < this.enemyArray.length; i++) {
-            this.enemyArray[i].moveEnemy();
-            this.game.physics.arcade.collide(this.enemyArray[i].enemy, this.platforms);
-        }
+
         this.moveCamera();
 
 
         this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
-        this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
+        //this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
 
 
@@ -326,7 +318,7 @@ MyGame.Game.prototype = {
     createPlatforms: function () {
 
         x = 300;
-        plateformArray = new Array();
+        this.plateformArray = new Array();
 
         function verifierPlateformePosition(x, y) {
             if (y < 910 || x < 250) {
