@@ -33,20 +33,14 @@ player.prototype.movePlayer = function(){
 	{
 		this.player.body.velocity.x = -200;
 
-		if (this.playerFacing !== 'left')
-		{
 			this.player.animations.play('left');
 			this.playerFacing = 'left';
-		}
 	}else if (this.cursors.right.isDown)
 	{
 		this.player.body.velocity.x = 200;
 
-		if (this.playerFacing !== 'right')
-		{
 			this.player.animations.play('right');
 			this.playerFacing = 'right';
-		}
 	}else
 	{
         this.player.animations.stop();
