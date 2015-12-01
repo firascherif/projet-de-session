@@ -21,6 +21,7 @@ MyGame.Game = function (game) {
     this.rnd;       //  the repeatable random number generator (Phaser.RandomDataGenerator)
 
 
+    this.pointage = 0;
     // Variables du jeu
     this.server = '';//http://localhost:8080/';
     this.player;
@@ -35,7 +36,6 @@ MyGame.Game = function (game) {
     this.plateformArray;
     this.minX;
     this.maxX;
-    this.door;
     var bullet;
     this.bulletTime = 0;
     this.plateformeLimite;
@@ -44,7 +44,7 @@ MyGame.Game = function (game) {
     var score = 0;
     var scoreText;
     var kill = true;
-
+    var explosions;
 };
 
 MyGame.Game.prototype = {
@@ -117,6 +117,9 @@ MyGame.Game.prototype = {
         this.platforms.setAll('body.checkCollision.left', false);
         this.platforms.setAll('body.checkCollision.right', false);
 
+        //score
+        this.score();
+
         // Player
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.player = new player(this.game, this.cursors);
@@ -133,28 +136,19 @@ MyGame.Game.prototype = {
         this.platformArray = new Array();
         this.enemies = this.game.add.group();
 
-        for(var i =0;i<25;i++) {
-            //console.log('coucou');
-                posX  = Math.random() * 4800 + 400;
-            //    posX = 800;
-                posY = Math.random() * 900;
-                //tmp = new Enemy(this.game, posX,posY)
-                //this.enemyArray.push(tmp);
-                var w = this.enemies.create(posX+400,posY,'enemy');
-                //console.log(this.enemies);
-                //this.enemyArray[i].enemy.set('body.checkCollision.left',true);
-        }
-        //this.enemies.checkCollision.left = true
-        //this.enemies.setAll('body.checkCollision.left',true);
-        this.enemies.enableBody = true;
-        this.game.physics.enable(this.enemies);
-        this.enemies.setAll('body.velocity.x',-100,true);
-        this.enemies.setAll('body.gravity.y',500,true);
-        this.enemies.callAll('animations.add', 'animations', 'left', [143,144,145,146,147,148,149,150], 10, true);
-        this.enemies.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
-        this.enemies.setAll('body.collideWorldBounds',true);
-        this.enemies.setAll('body.bounce.x',1,0);
+        this.generateEnemies();
 
+
+
+        //  Explosion pool
+        explosions = this.game.add.group();
+        this.game.physics.arcade.enable(explosions);
+        //for (var i = 0; i < 10; i++)
+        //{
+        //    var w = this.explosions.create(100, 1000, 'explosion');
+        //}
+        //
+        //explosions.setAll('exists',false);
         //setter la distance min et max de x si sur plateforme
         //for(var i = 0;i<this.enemyArray.length;i++){
         //    this.enemyArray[i].verifierSurPlateforme(plateformArray);
@@ -181,15 +175,33 @@ MyGame.Game.prototype = {
         this.time = this.game.time.now;
     },
 
-    resetEnemies: function (enemy) {
-        if(this.enemy != null)
-            enemy.revive();
-        enemy.body.x = Math.random() * 4800 + 400;
-        enemy.body.y =  Math.random() * 900;
-        enemy.body.velocity.x = -100;
+    generateEnemies: function () {
+        for(var i =0;i<25;i++) {
+            //console.log('coucou');
+            posX  = Math.random() * 4800 + 400;
+            //    posX = 800;
+            posY = Math.random() * 900;
+            //tmp = new Enemy(this.game, posX,posY)
+            //this.enemyArray.push(tmp);
+            var w = this.enemies.create(posX+400,posY,'enemy');
+            //console.log(this.enemies);
+            //this.enemyArray[i].enemy.set('body.checkCollision.left',true);
+        }
+        //this.enemies.checkCollision.left = true
+        //this.enemies.setAll('body.checkCollision.left',true);
+        this.enemies.enableBody = true;
+        this.game.physics.enable(this.enemies);
+        this.enemies.setAll('body.velocity.x',-100,true);
+        this.enemies.setAll('body.gravity.y',500,true);
+        this.enemies.callAll('animations.add', 'animations', 'left', [143,144,145,146,147,148,149,150], 10, true);
+        this.enemies.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
+        this.enemies.setAll('body.collideWorldBounds',true);
+        this.enemies.setAll('body.bounce.x',1,0);
     },
 
     update: function () {
+        //this.explosions.setAll('animations.play','animations','explosion');
+
         //temporaire je crois***
         if(this.player.player.body.x >= 5330) {
             this.player.player.kill();
@@ -198,7 +210,7 @@ MyGame.Game.prototype = {
         }
 
         if(this.player.levelOver){
-            this.enemies.forEachDead(this.resetEnemies,this);
+            this.generateEnemies();
             this.player.player.body.x = 200;
             this.player.player.body.y = 600;
             this.player.player.revive();
@@ -267,24 +279,6 @@ MyGame.Game.prototype = {
             }
         }
 
-    },
-
-
-
-    bulletVSenemy: function (bullet, enemy) {
-        bullet.kill();
-        enemy.kill();
-        this.enemyWave();
-    },
-
-    coreVSenemy: function (core, enemy) {
-       // this.gui = this.game.add.text(0, 0, 'GAME OVER', {fontSize: '32px', fill: '#fff'});
-        //this.gui.fixedToCamera = true;
-    },
-
-    enemyVSskin: function (skin, enemy) {
-
-        //enemy.body.velocity.x = -10;
     },
 
 
@@ -397,27 +391,10 @@ MyGame.Game.prototype = {
     },
 
     fire: function () {
-
-      /*  var tmp = this.bullets.getFirstDead();
-        console.log(tmp.x);
-        if (tmp) {
-            tmp.reset(this.player.x, this.player.y + 8);
-            tmp.body.velocity.y = 30;
-            this.bulletTime = this.game.time.now + 200;
-        }
-		*/
-		
-            //// fire it
-            //bullet.reset(player.x, player.y + 8);
-            //bullet.body.velocity.y = -400;
-            //bulletTime = game.time.now + 200;
-        console.log(this.bulletTime);
-
             if (this.game.time.now > this.bulletTime)
             {
                 bullet = this.bullets.getFirstExists(false);
                 this.resetBullet(bullet);
-                console.log(this.player.playerFacing);
                 if (bullet && this.player.playerFacing !== "idle")
                 {
                     bullet.reset(this.player.player.x + 6, this.player.player.y);
@@ -446,7 +423,9 @@ MyGame.Game.prototype = {
 
 
     flecheCollisionEnemy: function(bullet, enemy){
-
+        var boom = explosions.create(enemy.x,enemy.y,'explosion');
+        boom.animations.add('explosion', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,15], 16, false);
+        boom.animations.play('explosion',15,false,true);
         enemy.kill();
         bullet.kill();
 

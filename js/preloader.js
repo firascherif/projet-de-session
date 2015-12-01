@@ -22,6 +22,7 @@ MyGame.Preloader.prototype = {
         this.load.audio('maingame', 'assets/audio/maingame.mp3');
         this.load.image('star', 'assets/star.png');
         this.load.image('door','assets/porte.png');
+        this.load.spritesheet('explosion','assets/explosion.png',64,64);
         
     },
 
