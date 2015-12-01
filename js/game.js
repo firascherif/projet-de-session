@@ -197,6 +197,11 @@ MyGame.Game.prototype = {
         this.enemies.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
         this.enemies.setAll('body.collideWorldBounds',true);
         this.enemies.setAll('body.bounce.x',1,0);
+
+        this.door = this.game.add.group();
+        this.door = this.door.create(5322,590,'door');
+        this.door.enableBody = true;
+        this.door.immovable=true;
     },
 
     update: function () {
