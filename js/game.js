@@ -39,7 +39,7 @@ MyGame.Game = function (game) {
     var bullet;
     this.bulletTime = 0;
     this.plateformeLimite;
-
+    this.nbEnemy;
     var star
     var score = 0;
     var scoreText;
@@ -176,7 +176,8 @@ MyGame.Game.prototype = {
     },
 
     generateEnemies: function () {
-        for(var i =0;i<25;i++) {
+        this.nbEnemy = 25 - this.enemies.alive;
+        for(var i =0;i<this.nbEnemy;i++) {
             //console.log('coucou');
             posX  = Math.random() * 4800 + 400;
             //    posX = 800;
@@ -192,6 +193,7 @@ MyGame.Game.prototype = {
         this.enemies.enableBody = true;
         this.game.physics.enable(this.enemies);
         this.enemies.setAll('body.velocity.x',-100,true);
+        this.enemies.setAll('checkCollision.up',true);
         this.enemies.setAll('body.gravity.y',500,true);
         this.enemies.callAll('animations.add', 'animations', 'left', [143,144,145,146,147,148,149,150], 10, true);
         this.enemies.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
@@ -228,6 +230,10 @@ MyGame.Game.prototype = {
             this.player.levelOver = true;
             //this.enemies
         }
+
+        //if(this.game.physics.arcade.collideLeft(this.player.player,this.enemies.up)){
+        //    console.log('toucher');
+        //}
         this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy);
 
         //for(var i=0;i<this.bullets.length;i++) {
@@ -351,26 +357,35 @@ MyGame.Game.prototype = {
                 var b = this.plateformeLimite.create(x,y-50,'core');
                 var c = this.plateformeLimite.create(x+190,y-50,'core');
                 var d = this.platforms.create(x, y, 'platform');
+                var e = this.platforms.create(200, 950, 'platform');
                 b.body.immovable = true;
                 c.body.immovable = true;
                 d.body.immovable = true;
+                e.body.immovable = true;
                 d.body.checkCollision.down = false;
+                e.body.checkCollision.down = false;
                 d.body.checkCollision.right = true;
                 b.body.checkCollision.left = true;
                 c.body.checkCollision.left = true;
+                d.body.checkCollision.left = true;
                 b.body.checkCollision.right = true;
                 b.body.checkCollision.up = false;
+                e.body.checkCollision.up = true;
                 c.body.checkCollision.right = true;
+                e.body.checkCollision.right = false;
                 c.body.checkCollision.up = false;
                 this.game.physics.arcade.collide(b,this.enemies);
                 this.game.physics.arcade.collide(c,this.enemies);
+                this.game.physics.arcade.collide(e,this.player);
                 b.visible = true;
                 b.exists = true;
                 c.visible = true;
                 c.exists = true;
+                d.exists = true;
                 b.scale.setTo(0.0001,0.1);
                 c.scale.setTo(0.0001,0.1);
                 this.plateformArray.push(d);
+                this.plateformArray.push(e);
             }
 
         }
@@ -428,13 +443,13 @@ MyGame.Game.prototype = {
 
 
     flecheCollisionEnemy: function(bullet, enemy){
+        enemy.kill();
         var boom = explosions.create(enemy.x,enemy.y,'explosion');
         boom.animations.add('explosion', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,15], 16, false);
         boom.animations.play('explosion',15,false,true);
-        enemy.kill();
+
+        this.enemy--;
         bullet.kill();
-
-
     }
 
 

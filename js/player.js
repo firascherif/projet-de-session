@@ -4,7 +4,7 @@ player = function(game, cursors){
 	this.playerFacing = 'left';
 	
 	//Créer le player
-	this.player = game.add.sprite( 200, 1001, 'player', 26);
+	this.player = game.add.sprite( 200, 601, 'player', 26);
 	game.physics.enable(this.player, Phaser.Physics.ARCADE);
 	this.player.body.gravity.y = 700;
 	this.player.body.collideWorldBounds = true;
