@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00199ce5-6e61-4f67-a9ef-fc3e3b950b9e" name="Default" comment="ajout ramasser etoile">
+    <list default="true" id="00199ce5-6e61-4f67-a9ef-fc3e3b950b9e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/game.js" afterPath="$PROJECT_DIR$/js/game.js" />
     </list>
@@ -82,7 +82,7 @@
         <entry file="file://$PROJECT_DIR$/js/menu.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -91,8 +91,8 @@
       <file leaf-file-name="game.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31654677">
-              <caret line="275" column="57" selection-start-line="275" selection-start-column="57" selection-end-line="275" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.69304556">
+              <caret line="188" column="22" selection-start-line="188" selection-start-column="22" selection-end-line="188" selection-end-column="22" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -439,7 +439,13 @@
       <option name="project" value="LOCAL" />
       <updated>1450325181654</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="ajout autre enemies">
+      <created>1450325914536</created>
+      <option name="number" value="00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1450325914536</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -492,7 +498,8 @@
     <MESSAGE value="ajout de la porte" />
     <MESSAGE value="mise a jour" />
     <MESSAGE value="ajout ramasser etoile" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajout ramasser etoile" />
+    <MESSAGE value="ajout autre enemies" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajout autre enemies" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -806,7 +813,7 @@
     <entry file="file://$PROJECT_DIR$/js/menu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -865,8 +872,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31654677">
-          <caret line="275" column="57" selection-start-line="275" selection-start-column="57" selection-end-line="275" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.69304556">
+          <caret line="188" column="22" selection-start-line="188" selection-start-column="22" selection-end-line="188" selection-end-column="22" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>

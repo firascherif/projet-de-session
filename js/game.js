@@ -186,6 +186,7 @@ MyGame.Game.prototype = {
             //tmp = new Enemy(this.game, posX,posY)
             //this.enemyArray.push(tmp);
             var w = this.enemies.create(posX+400,posY,'enemy');
+            w.vie = 1;
             //console.log(this.enemies);
             //this.enemyArray[i].enemy.set('body.checkCollision.left',true);
         }
@@ -204,7 +205,8 @@ MyGame.Game.prototype = {
         for (var i=0;i<8;i++) {
             var posI = Math.random() * 3700 + 300;
             var posE = Math.random() *900;
-            this.enemyStrong.create(posI, posE, 'enemie');
+            var w = this.enemyStrong.create(posI, posE, 'enemie');
+            w.vie = 3;
         }
         this.enemyStrong.enableBody = true;
         this.game.physics.enable(this.enemyStrong);
@@ -250,17 +252,9 @@ MyGame.Game.prototype = {
             this.player.levelOver = true;
             //this.enemies
         }
-
-        //if(this.game.physics.arcade.collideLeft(this.player.player,this.enemies.up)){
-        //    console.log('toucher');
-        //}
         this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy);
         this.game.physics.arcade.overlap(this.stars,this.player.player,this.ramasseEtoile);
 
-        //for(var i=0;i<this.bullets.length;i++) {
-        //    this.game.physics.arcade.collide(this.bullets.getFirstAlive(), this.enemies,this.flecheCollisionEnemy,this);
-        //        //this.bullets.getFirstAlive().kill();
-        //}
 
 
         this.en.action("mofo");
@@ -479,12 +473,16 @@ MyGame.Game.prototype = {
 
 
     flecheCollisionEnemy: function(bullet, enemy){
-        enemy.kill();
-        var boom = explosions.create(enemy.x,enemy.y,'explosion');
-        boom.animations.add('explosion', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,15], 16, false);
-        boom.animations.play('explosion',15,false,true);
+        if(enemy.vie == 0) {
+            enemy.kill();
+            var boom = explosions.create(enemy.x, enemy.y, 'explosion');
+            boom.animations.add('explosion', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 16, false);
+            boom.animations.play('explosion', 15, false, true);
 
-        this.enemy--;
+            this.enemy--;
+        }else
+            enemy.vie --;
+
         bullet.kill();
     }
 
