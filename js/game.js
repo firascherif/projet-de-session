@@ -244,7 +244,7 @@ MyGame.Game.prototype = {
             //this.player.player.reset(200,600);
 
         }
-        if (this.game.physics.arcade.collide(this.player.player, this.enemies)) {
+        if (this.game.physics.arcade.collide(this.player.player, this.enemies) || this.game.physics.arcade.collide(this.player.player,this.enemyStrong)) {
             this.player.player.kill();
             this.player.levelOver = true;
             //this.enemies
