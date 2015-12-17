@@ -235,6 +235,7 @@ MyGame.Game.prototype = {
         //    console.log('toucher');
         //}
         this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy);
+        this.game.physics.arcade.overlap(this.stars,this.player.player,this.ramasseEtoile);
 
         //for(var i=0;i<this.bullets.length;i++) {
         //    this.game.physics.arcade.collide(this.bullets.getFirstAlive(), this.enemies,this.flecheCollisionEnemy,this);
@@ -308,16 +309,13 @@ MyGame.Game.prototype = {
         }
     },
 
+    ramasseEtoile : function(player,etoile){
+        etoile.kill();
+    },
+
     score: function () {
         this.scoreText = this.game.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#000' });
         this.scoreText.fixedToCamera = true;
-    },
-
-
-      collectStar : function (player, star) {
-    star.kill();
-    score += 10;
-    scoreText.text = 'Score: ' + score;
     },
 
     createPlatforms: function () {
