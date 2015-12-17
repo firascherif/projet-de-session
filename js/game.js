@@ -66,10 +66,8 @@ MyGame.Game.prototype = {
 
         this.plateformeLimite = this.game.add.group();
         // Core n Skin
-        //this.core = this.game.add.sprite(0, 600, 'core');
         this.skin = this.game.add.sprite(0, 600, 'skin');
         this.door = this.game.add.sprite(4010,600,'door');
-        //this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
 
         //stars
@@ -145,16 +143,6 @@ MyGame.Game.prototype = {
         //  Explosion pool
         explosions = this.game.add.group();
         this.game.physics.arcade.enable(explosions);
-        //for (var i = 0; i < 10; i++)
-        //{
-        //    var w = this.explosions.create(100, 1000, 'explosion');
-        //}
-        //
-        //explosions.setAll('exists',false);
-        //setter la distance min et max de x si sur plateforme
-        //for(var i = 0;i<this.enemyArray.length;i++){
-        //    this.enemyArray[i].verifierSurPlateforme(plateformArray);
-        //}
 
         // Bullets
         this.bullets = this.game.add.group();
@@ -169,10 +157,8 @@ MyGame.Game.prototype = {
         //this.enemyWave();
 
         // Initializing Controls
-        //this.cursors = this.game.input.keyboard.createCursorKeys();
         this.actionKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
         this.actionKey3 = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
-        //this.actionKey3.onDown.add(creationBullet, this);
 
         this.time = this.game.time.now;
     },
@@ -180,19 +166,11 @@ MyGame.Game.prototype = {
     generateEnemies: function () {
         this.nbEnemy = 12 - this.enemies.alive;
         for(var i =0;i<this.nbEnemy;i++) {
-            //console.log('coucou');
             posX  = Math.random() * 3096 + 400;
-            //    posX = 800;
             posY = Math.random() * 900;
-            //tmp = new Enemy(this.game, posX,posY)
-            //this.enemyArray.push(tmp);
             var w = this.enemies.create(posX+400,posY,'enemy');
             w.vie = 1;
-            //console.log(this.enemies);
-            //this.enemyArray[i].enemy.set('body.checkCollision.left',true);
         }
-        //this.enemies.checkCollision.left = true
-        //this.enemies.setAll('body.checkCollision.left',true);
         this.enemies.enableBody = true;
         this.game.physics.enable(this.enemies);
         this.enemies.setAll('body.velocity.x',-100,true);
@@ -219,10 +197,6 @@ MyGame.Game.prototype = {
         this.enemyStrong.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
         this.enemyStrong.setAll('body.collideWorldBounds',true);
         this.enemyStrong.setAll('body.bounce.x',1,0);
-        //this.door = this.enemyStrong.create();
-        //this.door = this.door.create(4600,590,'door');
-        //this.door.enableBody = true;
-        //this.door.immovable=true;
     },
 
     update: function () {
@@ -282,10 +256,6 @@ MyGame.Game.prototype = {
         this.player.movePlayer();
 
         this.moveCamera();
-
-
-        //this.game.physics.arcade.overlap(this.bullets, this.enemy, this.bulletVSenemy, null, this);
-        //this.game.physics.arcade.overlap(this.core, this.enemy, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
 
 
@@ -430,13 +400,6 @@ MyGame.Game.prototype = {
         else {
             this.game.scale.startFullScreen(false);
         }
-
-    },
-
-    render: function () {
-
-        //game.debug.bodyInfo(enemy, 16, 50);
-        //game.debug.cameraInfo(game.camera, 32, 32);
 
     },
 

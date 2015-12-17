@@ -91,8 +91,8 @@
       <file leaf-file-name="game.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.58753">
-              <caret line="228" column="20" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.78417265">
+              <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -469,7 +469,13 @@
       <option name="project" value="LOCAL" />
       <updated>1450328338444</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="essai pointage">
+      <created>1450329083380</created>
+      <option name="number" value="00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1450329083380</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -499,7 +505,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="corrections animations player" />
     <MESSAGE value="faire bouger un enemy" />
     <MESSAGE value="tableau d'ennemies disperser" />
     <MESSAGE value="retrait de ligne inutile" />
@@ -524,7 +529,8 @@
     <MESSAGE value="ajout de la porte" />
     <MESSAGE value="ajout contact nouveaux enemies" />
     <MESSAGE value="enlever des enemis car il y en a trop" />
-    <option name="LAST_COMMIT_MESSAGE" value="enlever des enemis car il y en a trop" />
+    <MESSAGE value="essai pointage" />
+    <option name="LAST_COMMIT_MESSAGE" value="essai pointage" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -897,8 +903,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.58753">
-          <caret line="228" column="20" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.78417265">
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
