@@ -84,7 +84,7 @@ MyGame.Game.prototype = {
 
 
 
-        this.game.world.setBounds(0, 0, 5400, 1200);
+        this.game.world.setBounds(0, 0, 4096, 1200);
 
         // Platforms
         this.platforms = this.game.add.group();
@@ -180,7 +180,7 @@ MyGame.Game.prototype = {
         this.nbEnemy = 25 - this.enemies.alive;
         for(var i =0;i<this.nbEnemy;i++) {
             //console.log('coucou');
-            posX  = Math.random() * 4800 + 400;
+            posX  = Math.random() * 3096 + 400;
             //    posX = 800;
             posY = Math.random() * 900;
             //tmp = new Enemy(this.game, posX,posY)
@@ -202,22 +202,23 @@ MyGame.Game.prototype = {
         this.enemies.setAll('body.bounce.x',1,0);
 
 
-        for (var i=0;i<4;i++){
-            posX =  Math.random() * 3700 +300;
-            posY = Math.random()*900;
-            var e = this.enemyStrong.add(posX,posY,'enemie');
-        }
-        this.door = this.enemyStrong.create();
-        this.door = this.door.create(5322,590,'door');
-        this.door.enableBody = true;
-        this.door.immovable=true;
+
+        //for (var i=0;i<4;i++){
+        //    posX =  Math.random() * 3700 +300;
+        //    posY = Math.random()*900;
+        //    var e = this.enemyStrong.add(posX,posY,'enemie');
+        //}
+        //this.door = this.enemyStrong.create();
+        //this.door = this.door.create(5322,590,'door');
+        //this.door.enableBody = true;
+        //this.door.immovable=true;
     },
 
     update: function () {
         //this.explosions.setAll('animations.play','animations','explosion');
 
         //temporaire je crois***
-        if(this.player.player.body.x >= 5330) {
+        if(this.player.player.body.x >= 4096) {
             this.player.player.kill();
             this.player.levelOver = true;
             console.log("Loader le prochain niveau");
