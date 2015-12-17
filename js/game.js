@@ -41,7 +41,8 @@ MyGame.Game = function (game) {
     this.bulletTime = 0;
     this.plateformeLimite;
     this.nbEnemy;
-    var star
+    this.door;
+    var star;
     var score = 0;
     var scoreText;
     var kill = true;
@@ -67,6 +68,7 @@ MyGame.Game.prototype = {
         // Core n Skin
         //this.core = this.game.add.sprite(0, 600, 'core');
         this.skin = this.game.add.sprite(0, 600, 'skin');
+        this.door = this.game.add.sprite(4010,600,'door');
         //this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
         this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
 
@@ -217,13 +219,8 @@ MyGame.Game.prototype = {
         this.enemyStrong.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
         this.enemyStrong.setAll('body.collideWorldBounds',true);
         this.enemyStrong.setAll('body.bounce.x',1,0);
-        //for (var i=0;i<4;i++){
-        //    posX =  Math.random() * 3700 +300;
-        //    posY = Math.random()*900;
-        //    var e = this.enemyStrong.add(posX,posY,'enemie');
-        //}
         //this.door = this.enemyStrong.create();
-        //this.door = this.door.create(5322,590,'door');
+        //this.door = this.door.create(4600,590,'door');
         //this.door.enableBody = true;
         //this.door.immovable=true;
     },
@@ -232,7 +229,7 @@ MyGame.Game.prototype = {
         //this.explosions.setAll('animations.play','animations','explosion');
 
         //temporaire je crois***
-        if(this.player.player.body.x >= 4096) {
+        if(this.player.player.body.x >= 4020) {
             this.player.player.kill();
             this.player.levelOver = true;
             console.log("Loader le prochain niveau");
@@ -473,7 +470,9 @@ MyGame.Game.prototype = {
 
 
     flecheCollisionEnemy: function(bullet, enemy){
-        if(enemy.vie == 0) {
+        enemy.vie --;
+
+        if(enemy.vie <= 0) {
             enemy.kill();
             var boom = explosions.create(enemy.x, enemy.y, 'explosion');
             boom.animations.add('explosion', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 16, false);
@@ -481,7 +480,6 @@ MyGame.Game.prototype = {
 
             this.enemy--;
         }else
-            enemy.vie --;
 
         bullet.kill();
     }
