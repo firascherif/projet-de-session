@@ -179,7 +179,7 @@ MyGame.Game.prototype = {
     },
 
     generateEnemies: function () {
-        this.nbEnemy = 25 - this.enemies.alive;
+        this.nbEnemy = 12 - this.enemies.alive;
         for(var i =0;i<this.nbEnemy;i++) {
             //console.log('coucou');
             posX  = Math.random() * 3096 + 400;
@@ -204,7 +204,8 @@ MyGame.Game.prototype = {
         this.enemies.setAll('body.collideWorldBounds',true);
         this.enemies.setAll('body.bounce.x',1,0);
 
-        for (var i=0;i<8;i++) {
+
+        for (var i=0;i<4;i++) {
             var posI = Math.random() * 3700 + 300;
             var posE = Math.random() *900;
             var w = this.enemyStrong.create(posI, posE, 'enemie');
