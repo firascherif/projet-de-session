@@ -91,8 +91,8 @@
       <file leaf-file-name="game.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.69304556">
-              <caret line="207" column="24" selection-start-line="207" selection-start-column="24" selection-end-line="207" selection-end-column="24" />
+            <state vertical-scroll-proportion="-3.58753">
+              <caret line="228" column="20" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="20" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -463,7 +463,13 @@
       <option name="project" value="LOCAL" />
       <updated>1450327861243</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="enlever des enemis car il y en a trop">
+      <created>1450328338444</created>
+      <option name="number" value="00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1450328338444</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -493,7 +499,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="essayer de tirer" />
     <MESSAGE value="corrections animations player" />
     <MESSAGE value="faire bouger un enemy" />
     <MESSAGE value="tableau d'ennemies disperser" />
@@ -518,7 +523,8 @@
     <MESSAGE value="ajout des vies des enemies" />
     <MESSAGE value="ajout de la porte" />
     <MESSAGE value="ajout contact nouveaux enemies" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajout contact nouveaux enemies" />
+    <MESSAGE value="enlever des enemis car il y en a trop" />
+    <option name="LAST_COMMIT_MESSAGE" value="enlever des enemis car il y en a trop" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -891,8 +897,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.69304556">
-          <caret line="207" column="24" selection-start-line="207" selection-start-column="24" selection-end-line="207" selection-end-column="24" />
+        <state vertical-scroll-proportion="-3.58753">
+          <caret line="228" column="20" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="20" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>

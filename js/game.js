@@ -21,7 +21,7 @@ MyGame.Game = function (game) {
     this.rnd;       //  the repeatable random number generator (Phaser.RandomDataGenerator)
 
 
-    this.pointage = 0;
+    this.pointage=0;
     // Variables du jeu
     this.server = '';//http://localhost:8080/';
     this.player;
@@ -121,7 +121,6 @@ MyGame.Game.prototype = {
         this.platforms.setAll('body.checkCollision.right', false);
 
         //score
-        this.score();
 
         // Player
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -227,6 +226,8 @@ MyGame.Game.prototype = {
     },
 
     update: function () {
+        this.score();
+
         //this.explosions.setAll('animations.play','animations','explosion');
 
         //temporaire je crois***
@@ -340,11 +341,12 @@ MyGame.Game.prototype = {
     },
 
     ramasseEtoile : function(player,etoile){
+        this.pointage += 10;
         etoile.kill();
     },
 
     score: function () {
-        this.scoreText = this.game.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.game.add.text(0, 0, 'score: '+ this.pointage, { fontSize: '32px', fill: '#000' });
         this.scoreText.fixedToCamera = true;
     },
 
@@ -472,6 +474,7 @@ MyGame.Game.prototype = {
 
     flecheCollisionEnemy: function(bullet, enemy){
         enemy.vie --;
+        this.pointage += 15;
 
         if(enemy.vie <= 0) {
             enemy.kill();
