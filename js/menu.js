@@ -23,6 +23,9 @@ MyGame.Menu.prototype = {
             var style2 = { font: "28px Arial", fill: "#FFFFFF", align: "center" };
             this.help = this.game.add.text(370,250,"Press `Enter` Key to start",style2);
 
+            var style3 = { font: "14px Arial", fill: "#FFFFFF", align: "center" };
+            this.help2 = this.game.add.text(370,350,"ARROWS TO MOVE -- LETTER `Q` TO FIRE/AIM ",style3);
+
 		
         
     },
