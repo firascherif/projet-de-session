@@ -33,6 +33,7 @@ MyGame.Game = function (game) {
     this.enemy;
     this.timer;
     this.enemies;
+    this.enemyStrong;
     this.plateformArray;
     this.minX;
     this.maxX;
@@ -135,7 +136,7 @@ MyGame.Game.prototype = {
 
         this.platformArray = new Array();
         this.enemies = this.game.add.group();
-
+        this.enemyStrong = this.game.add.group();
         this.generateEnemies();
 
 
@@ -200,7 +201,13 @@ MyGame.Game.prototype = {
         this.enemies.setAll('body.collideWorldBounds',true);
         this.enemies.setAll('body.bounce.x',1,0);
 
-        this.door = this.game.add.group();
+
+        for (var i=0;i<4;i++){
+            posX =  Math.random() * 3700 +300;
+            posY = Math.random()*900;
+            var e = this.enemyStrong.add(posX,posY,'enemie');
+        }
+        this.door = this.enemyStrong.create();
         this.door = this.door.create(5322,590,'door');
         this.door.enableBody = true;
         this.door.immovable=true;

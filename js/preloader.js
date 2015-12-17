@@ -23,6 +23,7 @@ MyGame.Preloader.prototype = {
         this.load.image('star', 'assets/star.png');
         this.load.image('door','assets/porte.png');
         this.load.spritesheet('explosion','assets/explosion.png',64,64);
+        this.load.spritesheet('enemie','assets/ennemie.png',64,64);
         
     },
 
