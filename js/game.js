@@ -201,8 +201,20 @@ MyGame.Game.prototype = {
         this.enemies.setAll('body.collideWorldBounds',true);
         this.enemies.setAll('body.bounce.x',1,0);
 
-
-
+        for (var i=0;i<8;i++) {
+            var posI = Math.random() * 3700 + 300;
+            var posE = Math.random() *900;
+            this.enemyStrong.create(posI, posE, 'enemie');
+        }
+        this.enemyStrong.enableBody = true;
+        this.game.physics.enable(this.enemyStrong);
+        this.enemyStrong.setAll('body.velocity.x',-100,true);
+        this.enemyStrong.setAll('checkCollision.up',true);
+        this.enemyStrong.setAll('body.gravity.y',600,true);
+        this.enemyStrong.callAll('animations.add', 'animations', 'left', [143,144,145,146,147,148,149,150], 10, true);
+        this.enemyStrong.callAll('animations.add', 'animations', 'right', [117,118,119,120,121,122,123,124], 10, true);
+        this.enemyStrong.setAll('body.collideWorldBounds',true);
+        this.enemyStrong.setAll('body.bounce.x',1,0);
         //for (var i=0;i<4;i++){
         //    posX =  Math.random() * 3700 +300;
         //    posY = Math.random()*900;
@@ -257,12 +269,16 @@ MyGame.Game.prototype = {
         // Collisions
         this.game.physics.arcade.collide(this.player.player, this.platforms, null, this.player.passerAtravers, this);
         this.game.physics.arcade.collide(this.enemies, this.ground);
+        this.game.physics.arcade.collide(this.enemyStrong, this.ground);
         this.game.physics.arcade.collide(this.enemies, this.platforms);
+        this.game.physics.arcade.collide(this.enemyStrong, this.platforms);
         this.game.physics.arcade.collide(this.enemies, this.plateformeLimite);
+        this.game.physics.arcade.collide(this.enemyStrong, this.plateformeLimite);
         this.game.physics.arcade.collide(this.stars, this.platforms);
         this.game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
         this.game.physics.arcade.overlap(this.enemy, this.skin, this.enemyVSskin, null, this);
         this.game.physics.arcade.overlap(this.bullets, this.enemies, this.flecheCollisionEnemy);
+        this.game.physics.arcade.overlap(this.bullets, this.enemyStrong, this.flecheCollisionEnemy);
 
 
 
@@ -296,6 +312,20 @@ MyGame.Game.prototype = {
             }
             if (this.enemies.getAt(z).body.x < 130 || this.enemies.getAt(z).body.x > 4800) {
                 this.enemies.getAt(z).body.velocity.x *= -1;
+            }
+        }
+
+        for (var z = 0; z < this.enemyStrong.length; z++) {
+            enemy = this.enemyStrong.getAt(z);
+
+            if (this.enemyStrong.getAt(z).body.velocity.x > 0) {
+                this.enemyStrong.getAt(z).animations.play('left');
+            }
+            else if (this.enemyStrong.getAt(z).body.velocity.x < 0) {
+                this.enemyStrong.getAt(z).animations.play('right');
+            }
+            if (this.enemyStrong.getAt(z).body.x < 130 || this.enemyStrong.getAt(z).body.x > 4800) {
+                this.enemyStrong.getAt(z).body.velocity.x *= -1;
             }
         }
 
